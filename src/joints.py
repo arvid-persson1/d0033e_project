@@ -3,25 +3,26 @@ from typing import Iterator
 
 
 class Joint(Enum):
-    CENTER_HIP = 1
-    SPINE = 2
-    CENTER_SHOULDER = 3
-    HEAD = 4
-    LEFT_SHOULDER = 5
-    LEFT_ELBOW = 6
+    # ordered by number in image, numbered by number in data
+    CENTER_HIP = 12
+    SPINE = 11
+    CENTER_SHOULDER = 2
+    HEAD = 1
+    LEFT_SHOULDER = 3
+    LEFT_ELBOW = 5
     LEFT_WRIST = 7
-    LEFT_HAND = 8
-    RIGHT_SHOULDER = 9
-    RIGHT_ELBOW = 10
-    RIGHT_WRIST = 11
-    RIGHT_HAND = 12
+    LEFT_HAND = 9
+    RIGHT_SHOULDER = 4
+    RIGHT_ELBOW = 6
+    RIGHT_WRIST = 8
+    RIGHT_HAND = 10
     LEFT_HIP = 13
-    LEFT_KNEE = 14
-    LEFT_ANKLE = 15
-    LEFT_FOOT = 16
-    RIGHT_HIP = 17
-    RIGHT_KNEE = 18
-    RIGHT_ANKLE = 19
+    LEFT_KNEE = 15
+    LEFT_ANKLE = 17
+    LEFT_FOOT = 19
+    RIGHT_HIP = 14
+    RIGHT_KNEE = 16
+    RIGHT_ANKLE = 18
     RIGHT_FOOT = 20
 
     @staticmethod
@@ -52,3 +53,9 @@ class Joint(Enum):
 
         yield "GESTURE_LABEL"
         yield "GESTURE_ID"
+
+    @staticmethod
+    def connections() -> list[tuple[int, int]]:
+        # not the same as in the image since the joint numbers aren't the same
+        return [(12, 11), (12, 13), (12, 14), (11, 2), (2, 1), (2, 3), (2, 4), (3, 5), (5, 7), (7, 9),
+                (4, 6), (6, 8), (8, 10), (13, 15), (15, 17), (17, 19), (14, 16), (16, 18), (18, 20)]

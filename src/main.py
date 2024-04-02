@@ -10,4 +10,3 @@ names = tuple(Joint.headers())
 training = pd.read_csv("../data/training.csv", names=names)
 
 #print(training.describe())
-print(set(Joint))

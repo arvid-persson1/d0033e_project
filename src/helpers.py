@@ -4,15 +4,13 @@ from typing import Iterable
 from joints import Joint
 
 
-def filter_df(
-        df: DataFrame,
-        joints: Iterable[Joint] | None = None,
-        positions: bool | (bool, bool, bool) = False,
-        angles: bool | (bool, bool, bool) = False,
-        means: bool = False,
-        deviations: bool = False,
-        labels: bool = False
-) -> DataFrame:
+def filter_df(df: DataFrame,
+              joints: Iterable[Joint] | None = None,
+              positions: bool | tuple[bool, bool, bool] = False,
+              angles: bool | tuple[bool, bool, bool] = False,
+              means: bool = False,
+              deviations: bool = False,
+              labels: bool = False) -> DataFrame:
     """
     Selects only certain columns of the dataframe.
     :param df: the dataframe to filter.
@@ -73,4 +71,4 @@ def filter_df(
     if labels:
         indices.add(240)
 
-    return df.iloc[:, indices]
+    return df.iloc[:, list(indices)]
