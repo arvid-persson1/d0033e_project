@@ -2,8 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-training = pd.read_csv("../data/training.csv")
+from joints import Joint
 
-print(training.head(5))
+names = [
+    *Joint.headers(),
+    "GESTURE_LABEL",
+    "GESTURE_ID"
+]
 
+training = pd.read_csv("../data/training.csv", names=names)
+
+# print(training.head(5))
 print(training.describe())
