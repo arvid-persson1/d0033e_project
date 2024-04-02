@@ -26,10 +26,11 @@ class Joint(Enum):
     RIGHT_FOOT = 20
 
     @staticmethod
-    def headers() -> Iterator[str]:
+    def headers(include_candidate: bool = False) -> Iterator[str]:
         """
         Yields appropriate headers for the data.
         The order will be: POS_MEAN, POS_STD, ANGLE_MEAN, ANGLE_STD.
+        :param include_candidate: whether or not the candidate column should be included.
         :return: an iterator over the headers.
         """
 
@@ -53,6 +54,8 @@ class Joint(Enum):
 
         yield "GESTURE_LABEL"
         yield "GESTURE_ID"
+        if include_candidate:
+            yield "CANDIDATE"
 
     @staticmethod
     def connections() -> list[tuple[int, int]]:
