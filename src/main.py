@@ -7,11 +7,7 @@ import matplotlib.pyplot as plt
 
 from joints import Joint
 
-names = [
-    *Joint.headers(),
-    "GESTURE_LABEL",
-    "GESTURE_ID"
-]
+names = tuple(Joint.headers(labels=True))
 
 training = pd.read_csv("../data/training.csv", names=names)
 
