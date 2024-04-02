@@ -29,8 +29,19 @@ class Joint(Enum):
             positions: bool = True,
             angles: bool = True,
             means: bool = True,
-            deviations: bool = True
+            deviations: bool = True,
+            labels: bool = False
     ) -> Iterator[str]:
+        """
+        Yields appropriate headers for the data.
+        If everything is included, the order will be: POS_MEAN, POS_STD, ANGLE_MEAN, ANGLE_STD.
+        :param positions: whether to include the position vectors
+        :param angles: whether to incldue the angles
+        :param means: whether to include the mean values
+        :param deviations: whether to include the standard deviations
+        :param labels: whether to incldue the gesture labels and ID's.
+        :return: an iterator over the headers.
+        """
 
         if positions and means:
             for joint in Joint:
@@ -52,3 +63,6 @@ class Joint(Enum):
                 yield f"{joint.name}_ANGLE_1_STD"
                 yield f"{joint.name}_ANGLE_2_STD"
                 yield f"{joint.name}_ANGLE_3_STD"
+        if labels:
+            yield "GESTURE_LABEL"
+            yield "GESTURE_ID"
