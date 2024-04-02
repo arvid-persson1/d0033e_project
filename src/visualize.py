@@ -21,9 +21,9 @@ Given a gesture from a dataset, drawHuman() should draw the human figure,
 the issue is the data point seems to be in random positions. 
 """
 def drawHuman(dataset, ax): #Does not wrok
-    A = [19,17,15,13,12,11,2,3,5,7,9]
-    B = [20,18,16,14,12]
-    C = [10,8,6,4,2]
+    A = [19,17,15,13,12,11,2,3,5,7,9]   #kopplar följande punkter 20-19-18-17-1-2-3-9-10-11-12
+    B = [20,18,16,14,12]    #kopplar följande punkter 16-15-14-13-1
+    C = [10,8,6,4,2,1]    #kopplar följande punkter 8-7-6-5-3-4
 
     for i in range(0,len(A)-1):
         X = getJoint(dataset, A[i])
@@ -37,9 +37,7 @@ def drawHuman(dataset, ax): #Does not wrok
         X = getJoint(dataset, C[i])
         Y = getJoint(dataset, C[i+1])
         ax.plot([X[0], Y[0]], [X[1], Y[1]], [X[2], Y[2]])
-    head = getJoint(dataset, 2)
-    neck = getJoint(dataset, 1)
-    ax.plot([head[0], neck[0]], [head[1], neck[1]], [head[2], neck[2]])
+
 
 """
 For loop is going through the first 20 data enteries
