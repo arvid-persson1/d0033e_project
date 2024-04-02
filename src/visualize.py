@@ -1,4 +1,4 @@
-# override default setting; display plot in new window
+# override default environment setting; display plot in new window
 # if this raises errors, try `pip install PyQt5`
 import matplotlib
 matplotlib.use("Qt5Agg")
