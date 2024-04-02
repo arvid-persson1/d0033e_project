@@ -7,6 +7,6 @@ from joints import Joint
 
 names = tuple(Joint.headers(labels=True))
 
-training = pd.read_csv(r"C:\Users\ammar\OneDrive\Desktop\MLPR\d0033e_project\data\training.csv", names=names)
+training = pd.read_csv("../data/training.csv", names=names)
 
 #print(training.describe())
