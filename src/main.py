@@ -5,8 +5,9 @@ from os import path
 
 from joints import Joint
 
-names = tuple(Joint.headers(labels=True))
+names = tuple(Joint.headers())
 
 training = pd.read_csv("../data/training.csv", names=names)
 
 #print(training.describe())
+print(set(Joint))
