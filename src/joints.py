@@ -3,26 +3,25 @@ from typing import Iterator
 
 
 class Joint(Enum):
-    # ordered by number in image, numbered by number in data
-    CENTER_HIP = 12
-    SPINE = 11
-    CENTER_SHOULDER = 2
     HEAD = 1
+    CENTER_SHOULDER = 2
     LEFT_SHOULDER = 3
-    LEFT_ELBOW = 5
-    LEFT_WRIST = 7
-    LEFT_HAND = 9
     RIGHT_SHOULDER = 4
+    LEFT_ELBOW = 5
     RIGHT_ELBOW = 6
+    LEFT_WRIST = 7
     RIGHT_WRIST = 8
+    LEFT_HAND = 9
     RIGHT_HAND = 10
+    SPINE = 11
+    CENTER_HIP = 12
     LEFT_HIP = 13
-    LEFT_KNEE = 15
-    LEFT_ANKLE = 17
-    LEFT_FOOT = 19
     RIGHT_HIP = 14
+    LEFT_KNEE = 15
     RIGHT_KNEE = 16
+    LEFT_ANKLE = 17
     RIGHT_ANKLE = 18
+    LEFT_FOOT = 19
     RIGHT_FOOT = 20
 
     def number(self):

@@ -1,20 +1,40 @@
-from pandas import DataFrame
+import pandas as pd
 from typing import Iterable
 
 from joints import Joint
 
+__df = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
+#__df.iloc[:, list(range(0, 60, 3))].sub(__df.iloc[:, 30], axis=0)
+__rowc, __colc = __df.shape
 
-def filter_df(df: DataFrame,
-              joints: Iterable[Joint] | None = None,
-              positions: bool | tuple[bool, bool, bool] = False,
-              angles: bool | tuple[bool, bool, bool] = False,
-              means: bool = False,
-              deviations: bool = False,
-              labels: bool = False) -> DataFrame:
+
+
+
+    #for i, row in df.iterrows():
+        #x = row[0]
+        #df.at[i, list(range(0, 60, 3))] -= x
+
+    #df.iloc[:, range(0, 60, 3)] -= xs[:, None]
+    #df.iloc[:, range(1, 60, 3)] -= ys[:, None]
+    #df.iloc[:, range(2, 60, 3)] -= zs[:, None]
+
+
+def get_data() -> pd.DataFrame:
+    return __df
+
+
+def get_filtered(joints: Iterable[Joint] | None = None,
+                 rows: Iterable[int] | int | None = None,
+                 positions: bool | tuple[bool, bool, bool] = False,
+                 angles: bool | tuple[bool, bool, bool] = False,
+                 means: bool = False,
+                 deviations: bool = False,
+                 labels: bool = False,
+                 ids: bool = False) -> pd.DataFrame:
     """
     Selects only certain columns of the dataframe.
-    :param df: the dataframe to filter.
     :param joints: which joints to include. All joints are included if this is `None`.
+    :param rows: which row(s) to include, zero-indexed. All rows are included if this is `None`.
     :param positions: whether or not to include position data. A single boolean value applies to (x, y, z)
     while a triple of booleans allows for them to be specified separately.
     :param angles: whether or not to include angle data. A single boolean value applies to (1, 2, 3)
@@ -22,8 +42,14 @@ def filter_df(df: DataFrame,
     :param means: whether or not to include mean values.
     :param deviations: whether or not to include standard deviations.
     :param labels: whether or not to include gesture labels.
+    :param ids: whether or not to incldue gesture ID's.
     :return: The dataframe with the filters applied.
     """
+
+    if isinstance(rows, int):
+        rows = [rows]
+    elif rows is None:
+        rows = range(__rowc)
 
     if isinstance(positions, bool):
         pos_x = pos_y = pos_z = positions
@@ -38,8 +64,8 @@ def filter_df(df: DataFrame,
     indices = set()
 
     # add indices for selected joints
-    if not joints:
-        indices = set(range(240))
+    if joints is None:
+        indices = set(range(__colc - 2))
     else:
         for joint in joints:
             offset = (joint.value - 1) * 3
@@ -71,4 +97,7 @@ def filter_df(df: DataFrame,
     if labels:
         indices.add(240)
 
-    return df.iloc[:, list(indices)]
+    if ids:
+        indices.add(241)
+
+    return __df.iloc[rows, list(indices)]

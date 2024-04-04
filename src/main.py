@@ -1,10 +1,6 @@
-import pandas as pd
-
-from joints import Joint
+from helpers import *
 from visualize import visualize
 
-names = tuple(Joint.headers())
+df = get_data()
 
-training = pd.read_csv("../data/training.csv", names=names)
-
-visualize(training, 100)
+visualize(0, True)
