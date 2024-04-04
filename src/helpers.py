@@ -1,22 +1,16 @@
 import pandas as pd
+import numpy as np
 from typing import Iterable
 
 from joints import Joint
 
 __df = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
-#__df.iloc[:, list(range(0, 60, 3))].sub(__df.iloc[:, 30], axis=0)
 __rowc, __colc = __df.shape
 
-
-
-
-    #for i, row in df.iterrows():
-        #x = row[0]
-        #df.at[i, list(range(0, 60, 3))] -= x
-
-    #df.iloc[:, range(0, 60, 3)] -= xs[:, None]
-    #df.iloc[:, range(1, 60, 3)] -= ys[:, None]
-    #df.iloc[:, range(2, 60, 3)] -= zs[:, None]
+# normalize positions
+__df.iloc[:, np.arange(0, 60, 3)] -= __df.iloc[:, 30].values.reshape(-1, 1)
+__df.iloc[:, np.arange(1, 60, 3)] -= __df.iloc[:, 31].values.reshape(-1, 1)
+__df.iloc[:, np.arange(2, 60, 3)] -= __df.iloc[:, 32].values.reshape(-1, 1)
 
 
 def get_data() -> pd.DataFrame:
