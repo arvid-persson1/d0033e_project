@@ -40,7 +40,6 @@ class Joint(Enum):
         """
 
         # Python somehow thinks this is calling get on Joint directly.
-        # The line below disables this warning in PyCharm.
         # noinspection PyUnresolvedReferences
         return Joint.__image_numbers.get(self.value)
 

@@ -7,11 +7,26 @@ from joints import Joint
 __df = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
 __rows, __cols = __df.shape
 
-# normalize positions
-# spine x, y, z positions are on indices 30, 31, 32 respectively.
-__df.iloc[:, np.arange(0, 60, 3)] -= __df.iloc[:, 30].values.reshape(-1, 1)
-__df.iloc[:, np.arange(1, 60, 3)] -= __df.iloc[:, 31].values.reshape(-1, 1)
-__df.iloc[:, np.arange(2, 60, 3)] -= __df.iloc[:, 32].values.reshape(-1, 1)
+
+def __normalize():
+    global __df
+    # spine x, y, z positions are on indices 30, 31, 32 respectively.
+    __df.iloc[:, np.arange(0, 60, 3)] -= __df.iloc[:, 30].values.reshape(-1, 1)
+    __df.iloc[:, np.arange(1, 60, 3)] -= __df.iloc[:, 31].values.reshape(-1, 1)
+    __df.iloc[:, np.arange(2, 60, 3)] -= __df.iloc[:, 32].values.reshape(-1, 1)
+
+    for index, row in __df.iterrows():
+        # left and right shoulder positions are on indices 6-11
+        positions = __df.iloc[index, 6:12].tolist()
+
+        # Python thinks this code is unreachable.
+        # noinspection PyUnreachableCode
+        n = np.cross(positions[:3], positions[3:])
+
+        # TODO: rotation normalization using n
+
+
+__normalize()
 
 
 def get_data() -> pd.DataFrame:
