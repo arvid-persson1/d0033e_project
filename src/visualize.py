@@ -15,9 +15,9 @@ def visualize(index: int = 0, axis: bool = False):
     :param axis: whether or not to label the axis.
     """
 
-    xs = get_filtered(rows=index, positions=(True, False, False), means=True).iloc[0].tolist()
-    ys = get_filtered(rows=index, positions=(False, True, False), means=True).iloc[0].tolist()
-    zs = get_filtered(rows=index, positions=(False, False, True), means=True).iloc[0].tolist()
+    xs = get_filtered(rows=index, positions=(True, False, False), means=True)
+    ys = get_filtered(rows=index, positions=(False, True, False), means=True)
+    zs = get_filtered(rows=index, positions=(False, False, True), means=True)
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
@@ -30,11 +30,18 @@ def visualize(index: int = 0, axis: bool = False):
         i -= 1
         j -= 1
 
-        ax.plot([xs[i], xs[j]], [ys[i], ys[j]], [zs[i], zs[j]], color="red")
+        ax.plot(
+            [xs.iloc[i], xs.iloc[j]],
+            [ys.iloc[i], ys.iloc[j]],
+            [zs.iloc[i], zs.iloc[j]],
+            color="red"
+        )
 
     if axis:
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
         ax.set_zlabel('Z Label')
+
+    ax.view_init(elev=-90, azim=90)
 
     plt.show()

@@ -86,7 +86,6 @@ def get_filtered(joints: Iterable[Joint] | None = None,
 
     if labels:
         indices.add(240)
-
     if ids:
         indices.add(241)
 
