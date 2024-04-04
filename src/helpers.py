@@ -5,9 +5,10 @@ from typing import Iterable
 from joints import Joint
 
 __df = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
-__rowc, __colc = __df.shape
+__rows, __cols = __df.shape
 
 # normalize positions
+# spine x, y, z positions are on indices 30, 31, 32 respectively.
 __df.iloc[:, np.arange(0, 60, 3)] -= __df.iloc[:, 30].values.reshape(-1, 1)
 __df.iloc[:, np.arange(1, 60, 3)] -= __df.iloc[:, 31].values.reshape(-1, 1)
 __df.iloc[:, np.arange(2, 60, 3)] -= __df.iloc[:, 32].values.reshape(-1, 1)
@@ -40,11 +41,6 @@ def get_filtered(joints: Iterable[Joint] | None = None,
     :return: The dataframe with the filters applied.
     """
 
-    if isinstance(rows, int):
-        rows = [rows]
-    elif rows is None:
-        rows = range(__rowc)
-
     if isinstance(positions, bool):
         pos_x = pos_y = pos_z = positions
     else:
@@ -59,7 +55,7 @@ def get_filtered(joints: Iterable[Joint] | None = None,
 
     # add indices for selected joints
     if joints is None:
-        indices = set(range(__colc - 2))
+        indices = set(range(__cols - 2))
     else:
         for joint in joints:
             offset = (joint.value - 1) * 3
@@ -94,4 +90,7 @@ def get_filtered(joints: Iterable[Joint] | None = None,
     if ids:
         indices.add(241)
 
-    return __df.iloc[rows, list(indices)]
+    if rows is None:
+        return __df.iloc[:, iter(indices)]
+    else:
+        return __df.iloc[rows, iter(indices)]
