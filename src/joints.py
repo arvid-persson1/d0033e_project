@@ -25,6 +25,49 @@ class Joint(Enum):
     RIGHT_ANKLE = 18
     RIGHT_FOOT = 20
 
+    def number(self):
+        """
+        Gets the number associated with this joint in the data.
+        This is an alias for `self.value`
+        :return: the number associated with the joint.
+        """
+
+        return self.value
+
+    def image_number(self):
+        """
+        Gets the number associated with this joint in the image.
+        :return: the number associated with the joint.
+        """
+
+        # Python somehow thinks this is calling get on Joint directly.
+        # The line below disables this warning in PyCharm.
+        # noinspection PyUnresolvedReferences
+        return Joint.__image_numbers.get(self.value)
+
+    __image_numbers = {
+        CENTER_HIP: 1,
+        SPINE: 2,
+        CENTER_SHOULDER: 3,
+        HEAD: 4,
+        LEFT_SHOULDER: 5,
+        LEFT_ELBOW: 6,
+        LEFT_WRIST: 7,
+        LEFT_HAND: 8,
+        RIGHT_SHOULDER: 9,
+        RIGHT_ELBOW: 10,
+        RIGHT_WRIST: 11,
+        RIGHT_HAND: 12,
+        LEFT_HIP: 13,
+        LEFT_KNEE: 14,
+        LEFT_ANKLE: 15,
+        LEFT_FOOT: 16,
+        RIGHT_HIP: 17,
+        RIGHT_KNEE: 18,
+        RIGHT_ANKLE: 19,
+        RIGHT_FOOT: 20
+    }
+
     @staticmethod
     def headers(include_candidate: bool = False) -> Iterator[str]:
         """
