@@ -9,11 +9,12 @@ from gestures import Gesture
 from helpers import *
 
 
-def visualize(df: DataFrame, index: int = 0):
+def visualize(df: DataFrame, index: int = 0, axis: bool = False):
     """
     Visualizes a gesture as a 3d plot.
     :param df: the dataframe containing the data.
     :param index: the index of the gesture to visualize, 0-indexed.
+    :param axis: whether or not to label the axis.
     """
 
     hello_gesture = df.iloc[[index]]
@@ -36,8 +37,9 @@ def visualize(df: DataFrame, index: int = 0):
         x_j, y_j, z_j = hello_positions.iloc[0, j:j + 3].values
         ax.plot([x_i, x_j], [y_i, y_j], [z_i, z_j])
 
-    # ax.set_xlabel('X Label')
-    # ax.set_ylabel('Y Label')
-    # ax.set_zlabel('Z Label')
+    if axis:
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')
 
     plt.show()
