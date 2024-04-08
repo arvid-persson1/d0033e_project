@@ -6,5 +6,5 @@ df = get_data()
 # visualize(0, True)
 
 # import models.svm
-
-import models.naive_bayes
+# import models.naive_bayes
+import models.neighbors
