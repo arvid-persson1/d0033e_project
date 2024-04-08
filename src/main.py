@@ -3,4 +3,6 @@ from visualize import visualize
 
 df = get_data()
 
-visualize(0, True)
+# visualize(0, True)
+
+import models.svm
