@@ -8,13 +8,14 @@ matplotlib.use("Qt5Agg")
 from helpers import *
 
 
-def visualize(index: int = 0, axis: bool = False):
+def visualize(index: int = 0, axes: bool = False):
     """
     Visualizes a gesture as a 3d plot.
     :param index: the index of the gesture to visualize, 0-indexed.
-    :param axis: whether or not to label the axis.
+    :param axes: whether or not to label the axes.
     """
 
+    # Three filterings are definitely not necessary.
     xs = get_filtered(rows=index, positions=(True, False, False), means=True)
     ys = get_filtered(rows=index, positions=(False, True, False), means=True)
     zs = get_filtered(rows=index, positions=(False, False, True), means=True)
@@ -37,7 +38,7 @@ def visualize(index: int = 0, axis: bool = False):
             color="red"
         )
 
-    if axis:
+    if axes:
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
         ax.set_zlabel('Z Label')

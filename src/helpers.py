@@ -33,6 +33,8 @@ def get_data() -> pd.DataFrame:
     return __df
 
 
+# A lot of functionality here is unnecessary and should be removed in a later version.
+# Currently, it's all kept in for flexibility.
 def get_filtered(joints: Iterable[Joint] | None = None,
                  rows: Iterable[int] | int | None = None,
                  positions: bool | tuple[bool, bool, bool] = False,
@@ -66,6 +68,9 @@ def get_filtered(joints: Iterable[Joint] | None = None,
     else:
         angle_1, angle_2, angle_3 = angles
 
+    # The performance of using an index set is not tested.
+    # It's also not the prettiest solution, but a refactor can wait until we know
+    # what functionality is actually needed.
     indices = set()
 
     # add indices for selected joints
@@ -108,3 +113,11 @@ def get_filtered(joints: Iterable[Joint] | None = None,
         return __df.iloc[:, iter(indices)]
     else:
         return __df.iloc[rows, iter(indices)]
+
+
+def get_numeric(joints: Iterable[Joint] | None = None, rows: Iterable[int] | int | None = None) -> pd.DataFrame:
+    """
+    Alias for `get_filtered(positions=True, angles=True, means=True, deviations=True, labels=False, ids=False)`
+    """
+
+    return get_filtered(joints, rows, True, True, True, True)
