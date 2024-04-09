@@ -1,7 +1,9 @@
 from helpers import *
 from visualize import visualize
 
-df = get_data()
+df = get_training()
+
+print(df.iloc[0, 0])
 
 # visualize(0, True)
 

@@ -4,20 +4,20 @@ from typing import Iterable
 
 from joints import Joint
 
-__df = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
-__rows, __cols = __df.shape
+__training = pd.read_csv("../data/training.csv", names=tuple(Joint.headers()))
+__testing = pd.read_csv("../data/test.csv", names=tuple(Joint.headers()))
+__rows, __cols = __training.shape
 
 
-def __normalize():
-    global __df
+def __normalize(df: pd.DataFrame):
     # spine x, y, z positions are on indices 30, 31, 32 respectively.
-    __df.iloc[:, np.arange(0, 60, 3)] -= __df.iloc[:, 30].values.reshape(-1, 1)
-    __df.iloc[:, np.arange(1, 60, 3)] -= __df.iloc[:, 31].values.reshape(-1, 1)
-    __df.iloc[:, np.arange(2, 60, 3)] -= __df.iloc[:, 32].values.reshape(-1, 1)
+    df.iloc[:, np.arange(0, 60, 3)] -= df.iloc[:, 30].values.reshape(-1, 1)
+    df.iloc[:, np.arange(1, 60, 3)] -= df.iloc[:, 31].values.reshape(-1, 1)
+    df.iloc[:, np.arange(2, 60, 3)] -= df.iloc[:, 32].values.reshape(-1, 1)
 
-    for index, row in __df.iterrows():
+    for index, row in df.iterrows():
         # left and right shoulder positions are on indices 6-11
-        positions = __df.iloc[index, 6:12].tolist()
+        positions = df.iloc[index, 6:12].tolist()
 
         # Python thinks this code is unreachable.
         # noinspection PyUnreachableCode
@@ -26,11 +26,16 @@ def __normalize():
         # TODO: rotation normalization using n
 
 
-__normalize()
+__normalize(__training)
+__normalize(__testing)
 
 
-def get_data() -> pd.DataFrame:
-    return __df
+def get_training() -> pd.DataFrame:
+    return __training
+
+
+def get_testing() -> pd.DataFrame:
+    return __testing
 
 
 # A lot of functionality here is unnecessary and should be removed in a later version.
@@ -110,9 +115,9 @@ def get_filtered(joints: Iterable[Joint] | None = None,
         indices.add(241)
 
     if rows is None:
-        return __df.iloc[:, iter(indices)]
+        return __training.iloc[:, iter(indices)]
     else:
-        return __df.iloc[rows, iter(indices)]
+        return __training.iloc[rows, iter(indices)]
 
 
 def get_numeric(joints: Iterable[Joint] | None = None, rows: Iterable[int] | int | None = None) -> pd.DataFrame:

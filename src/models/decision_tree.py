@@ -4,7 +4,7 @@ from src.helpers import *
 
 # TODO: remove this when missing values are handled properly.
 from src import helpers
-helpers.__df = helpers.__df.dropna()
+helpers.__training = helpers.__training.dropna()
 
 features = get_numeric()
 target = get_filtered(ids=True)

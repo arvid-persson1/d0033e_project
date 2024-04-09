@@ -23,7 +23,7 @@ def visualize(index: int = 0, axes: bool = False):
     ax = fig.add_subplot(projection='3d')
     ax.scatter(xs, ys, zs)
 
-    plt.title(f'"{get_data().iloc[index, 240]}"')
+    plt.title(f'"{get_training().iloc[index, 240]}"')
 
     for i, j in Joint.connections():
         # adjust offset
