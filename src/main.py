@@ -1,3 +1,6 @@
+from functools import partial
+
+from numpy import linspace
 from sklearn import *
 
 from optimize import *
@@ -12,14 +15,12 @@ def main():
     # import models.neighbors
     # import models.decision_tree
 
-    # print(accuracy(svm.SVC, lambda df: preprocessing.StandardScaler().fit_transform(df), kernel='linear'))
-    r = optimize_parameters(
-        svm.SVC,
-        {"C": 0.001},
-        kernel="linear"
+    cfg, acc = optimize_parameters(
+        partial(svm.SVC, kernel="linear"),
+        lambda df: preprocessing.StandardScaler().fit_transform(df),
+        C=linspace(0.001, 10, 10),
     )
-
-    print(r)
+    print(cfg, acc)
     pass
 
 
