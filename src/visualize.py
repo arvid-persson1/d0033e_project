@@ -2,7 +2,6 @@ import matplotlib
 from matplotlib import pyplot as plt
 
 # override default environment setting; display plot in new window
-# if this raises errors, try `pip install PyQt5`
 matplotlib.use("Qt5Agg")
 
 from helpers import *
