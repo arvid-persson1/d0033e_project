@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from typing import Iterable
 
 from joints import Joint
 
@@ -10,13 +9,13 @@ __rows, __cols = __training.shape
 
 
 def __normalize(df: pd.DataFrame):
-    # spine x, y, z positions are on indices 30, 31, 32 respectively.
+    # Spine x, y, z positions are on indices 30, 31, 32 respectively.
     df.iloc[:, np.arange(0, 60, 3)] -= df.iloc[:, 30].values.reshape(-1, 1)
     df.iloc[:, np.arange(1, 60, 3)] -= df.iloc[:, 31].values.reshape(-1, 1)
     df.iloc[:, np.arange(2, 60, 3)] -= df.iloc[:, 32].values.reshape(-1, 1)
 
     for index, row in df.iterrows():
-        # left and right shoulder positions are on indices 6-11
+        # Left and right shoulder positions are on indices 6-11.
         positions = df.iloc[index, 6:12].tolist()
 
         # Python thinks this code is unreachable.
@@ -33,8 +32,8 @@ __normalize(__testing)
 __training = __training.dropna()
 __testing = __testing.dropna()
 
-# numeric values (positions and angles) are in columns 0-239,
-# gesture ID's are in column 241
+# Numeric values (positions and angles) are in columns 0-239,
+# gesture ID's are in column 241.
 __training_features = __training.iloc[:, range(240)]
 __training_target = __training.iloc[:, 241]
 __testing_features = __testing.iloc[:, range(240)]

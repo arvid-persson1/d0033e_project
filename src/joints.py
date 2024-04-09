@@ -75,7 +75,7 @@ class Joint(Enum):
         :return: an iterator over the headers.
         """
 
-        # repeated iteration like this is necessary because of the order.
+        # Repeated iteration like this are necessary because of the order.
         for joint in Joint:
             yield f"{joint.name}_POS_X_MEAN"
             yield f"{joint.name}_POS_Y_MEAN"
@@ -100,6 +100,6 @@ class Joint(Enum):
 
     @staticmethod
     def connections() -> list[tuple[int, int]]:
-        # this is not the same as in the image since the joint numbers aren't the same
+        # This is not the same as in the image since the joint numbers aren't the same.
         return [(12, 11), (12, 13), (12, 14), (11, 2), (2, 1), (2, 3), (2, 4), (3, 5), (5, 7), (7, 9),
                 (4, 6), (6, 8), (8, 10), (13, 15), (15, 17), (17, 19), (14, 16), (16, 18), (18, 20)]
