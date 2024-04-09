@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 # override default environment setting; display plot in new window
 matplotlib.use("Qt5Agg")
 
-from helpers import *
+from data import *
 
 
 def visualize(index: int = 0, axes: bool = False):
@@ -15,15 +15,15 @@ def visualize(index: int = 0, axes: bool = False):
     """
 
     # Three filterings are definitely not necessary.
-    xs = get_filtered(rows=index, positions=(True, False, False), means=True)
-    ys = get_filtered(rows=index, positions=(False, True, False), means=True)
-    zs = get_filtered(rows=index, positions=(False, False, True), means=True)
+    xs = __training.iloc[index, range(0, 60, 3)]
+    ys = __training.iloc[index, range(1, 60, 3)]
+    zs = __training.iloc[index, range(2, 60, 3)]
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
     ax.scatter(xs, ys, zs)
 
-    plt.title(f'"{get_training().iloc[index, 240]}"')
+    plt.title(f'"{__training.iloc[index, 240]}"')
 
     for i, j in Joint.connections():
         # adjust offset
