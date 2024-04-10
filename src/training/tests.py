@@ -28,30 +28,30 @@ def test_svc() -> Iterator[OptimizeResult]:
         partial(svm.SVC, kernel="linear"),
         "SVM (C-support), linear",
         preprocessor=lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(0.5, 0.15, 100),
+        C=linspace(0.0001, 0.05, 100),
     )
 
     yield optimize_parameters(
         partial(svm.SVC, kernel="poly", degree=2),
         "SVM (C-support), polynomial (quadratic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(0.4, 0.6, 20),
-        coef0=linspace(10, 20, 20)
+        C=linspace(0.0001, 0.4, 50),
+        coef0=linspace(5, 15, 10)
     )
 
     yield optimize_parameters(
         partial(svm.SVC, kernel="poly", degree=3),
         "SVM (C-support), polynomial (cubic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(0.00001, 0.01, 20),
-        coef0=linspace(30, 40, 20)
+        C=linspace(0.00001, 0.001, 50),
+        coef0=linspace(30, 40, 10)
     )
 
     yield optimize_parameters(
         partial(svm.SVC, kernel="poly", degree=4),
         "SVM (C-support), polynomial (quartic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(0.00001, 0.01, 20),
+        C=linspace(0.00001, 0.0001, 20),
         coef0=linspace(30, 40, 20)
     )
 
@@ -59,14 +59,14 @@ def test_svc() -> Iterator[OptimizeResult]:
         partial(svm.SVC, kernel="rbf"),
         "SVM (C-support), RBF",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(2, 3, 100)
+        C=linspace(2.3, 2.6, 50)
     )
 
     yield optimize_parameters(
         partial(svm.SVC, kernel="sigmoid"),
         "SVM (C-support), sigmoid",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        C=linspace(5, 6, 100)
+        C=linspace(5.6, 5.75, 50)
     )
 
 
@@ -75,45 +75,45 @@ def test_nu_svc() -> Iterator[OptimizeResult]:
         partial(svm.NuSVC, kernel="linear"),
         "SVM (Nu-support), linear",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.25, 0.4, 100),
+        nu=linspace(0.3, 0.35, 50),
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=2),
         "SVM (Nu-support), polynomial (quadratic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.00001, 0.01, 20),
-        coef0=linspace(4.5, 6, 20)
+        nu=linspace(0.00001, 0.0001, 20),
+        coef0=linspace(4.75, 5.25, 10)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=3),
         "SVM (Nu-support), polynomial (cubic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.00001, 0.01, 20),
-        coef0=linspace(20, 30, 20)
+        nu=linspace(0.0000001, 0.00001, 50),
+        coef0=linspace(20, 25, 10)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=4),
         "SVM (Nu-support), polynomial (quartic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.00001, 0.01, 20),
-        coef0=linspace(30, 40, 20)
+        nu=linspace(0.0000001, 0.00001, 50),
+        coef0=linspace(27.5, 32.5, 20)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="rbf"),
         "SVM (Nu-support), RBF",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.01, 0.03, 100)
+        nu=linspace(0.01, 0.015, 50)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="sigmoid"),
         "SVM (Nu-support), sigmoid",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.25, 0.4, 100)
+        nu=linspace(0.3, 0.35, 50)
     )
 
 
@@ -124,22 +124,20 @@ def test_linear_model() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         linear_model.PassiveAggressiveClassifier,
         "Linear Model (passive aggressive)",
-        C=linspace(5, 6.5, 100)
+        C=linspace(5.5, 6, 50)
     )
 
     yield optimize_parameters(
         linear_model.RidgeClassifier,
         "Linear Model (ridge)",
-        alpha=linspace(0.00001, 0.01, 100)
+        alpha=linspace(0.001, 0.01, 50)
     )
 
     # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
     yield optimize_parameters(
-        partial(linear_model.SGDClassifier),
+        partial(linear_model.SGDClassifier, loss="squared hinge"),
         "Linear Model (stochasitc gradient descent)",
-        loss=("hinge", "log_loss", "modified_huber", "squared_hinge",
-              "perceptron", "huber", "epsilon_insensitive"),
-        alpha=linspace(0.00001, 0.01, 25)
+        alpha=linspace(0.001, 0.002, 50)
     )
 
 
@@ -147,25 +145,24 @@ def test_naive_bayes() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=linspace(0.00001, 0.01, 100)
+        alpha=linspace(0.0000001, 0.00001, 100)
     )
 
     # Except for the Bernoulli model, Naive Bayes does not work with negative values.
 
 
 def test_neighbors() -> Iterator[OptimizeResult]:
+    # Included only for completeness.
     yield optimize_parameters(
-        neighbors.KNeighborsClassifier,
+        partial(neighbors.KNeighborsClassifier, weights="uniform"),
         "k Nearest Neighbors",
-        n_neighbors=range(1, 100),
-        weights=("uniform", "distance")
+        n_neighbors=(1,)
     )
 
     yield optimize_parameters(
-        neighbors.RadiusNeighborsClassifier,
+        partial(neighbors.RadiusNeighborsClassifier, weights="distance"),
         "Radius Neighbors",
-        radius=linspace(1.5, 3, 100),
-        weights=("uniform", "distance")
+        radius=linspace(2, 2.5, 100),
     )
 
 
@@ -186,22 +183,20 @@ def test_neural_network() -> Iterator[OptimizeResult]:
 def test_tree() -> Iterator[OptimizeResult]:
     # TODO: vary other parameters
     yield optimize_parameters(
-        tree.DecisionTreeClassifier,
+        partial(tree.DecisionTreeClassifier, criterion="log_loss", splitter="best", max_features=240),
         "Decision Tree",
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("best", "random"),
-        max_depth=range(1, 20),
-        min_samples_split=linspace(0.01, 0.2, 20)
+        max_depth=range(10, 20),
+        min_samples_split=range(1, 20),
+        min_samples_leaf=range(5)
     )
 
     # TODO: vary other parameters
     yield optimize_parameters(
-        tree.ExtraTreeClassifier,
+        partial(tree.ExtraTreeClassifier, criterion="gini", splitter="best", max_features=240),
         "Extra Tree",
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("best", "random"),
-        max_depth=range(1, 20),
-        min_samples_split=linspace(0.01, 0.2, 20)
+        max_depth=range(10, 20),
+        min_samples_split=range(1, 20),
+        min_samples_leaf=range(5)
     )
 
 

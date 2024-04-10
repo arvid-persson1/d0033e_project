@@ -3,9 +3,9 @@
     "name": "SVM (C-support), linear",
     "accuracy": 0.8778195488721805,
     "best_params": {
-      "C": 0.5
+      "C": 0.05
     },
-    "average_time": 0.06321526527404785
+    "average_time": 0.06190614700317383
   },
   {
     "name": "SVM (C-support), polynomial (quadratic)",
