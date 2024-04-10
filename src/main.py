@@ -3,8 +3,7 @@ from training.tests import *
 
 def main():
     dump(
-        *test_svc(),
-        *test_nu_svc(),
+        *test_svc()
         # Neural networks have been omitted as they are significantly more
         # expensive to optimize compared to other models. There will be
         # later iterations testing only neural networks.

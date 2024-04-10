@@ -1,0 +1,181 @@
+[
+  {
+    "name": "SVM (C-support), linear",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "C": 0.018357142857142857
+    },
+    "average_time": 0.059113893508911136
+  },
+  {
+    "name": "SVM (C-support), polynomial (quadratic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.069,
+      "coef0": 31.168367346938776
+    },
+    "average_time": 0.058801479530334474
+  },
+  {
+    "name": "SVM (C-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0005583673469387755,
+      "coef0": 50.60505050505051
+    },
+    "average_time": 0.058186776638031006
+  },
+  {
+    "name": "SVM (C-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 1.1592929292929292e-05,
+      "coef0": 45.12244897959184
+    },
+    "average_time": 0.05770466804504395
+  },
+  {
+    "name": "SVM (C-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "C": 2.419848484848485
+    },
+    "average_time": 0.09741920232772827
+  },
+  {
+    "name": "SVM (C-support), sigmoid",
+    "accuracy": 0.8383458646616542,
+    "best_params": {
+      "C": 5.68334693877551
+    },
+    "average_time": 0.05874570369720459
+  },
+  {
+    "name": "SVM (Nu-support), linear",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "nu": 0.31997474747474747
+    },
+    "average_time": 0.06322024583816528
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quadratic)",
+    "accuracy": 0.8759398496240601,
+    "best_params": {
+      "nu": 8.242105263157895e-05,
+      "coef0": 4.810204081632653
+    },
+    "average_time": 0.038171735286712645
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (cubic)",
+    "accuracy": 0.8853383458646616,
+    "best_params": {
+      "nu": 5.154166666666666e-06,
+      "coef0": 24.349999999999998
+    },
+    "average_time": 0.050562738037109374
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quartic)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "nu": 5.4033333333333334e-08,
+      "coef0": 30.1
+    },
+    "average_time": 0.049111197662353515
+  },
+  {
+    "name": "SVM (Nu-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "nu": 0.011410204081632652
+    },
+    "average_time": 0.23391319751739503
+  },
+  {
+    "name": "SVM (Nu-support), sigmoid",
+    "accuracy": 0.8421052631578947,
+    "best_params": {
+      "nu": 0.33483333333333337
+    },
+    "average_time": 0.0651593017578125
+  },
+  {
+    "name": "Linear Model (passive aggressive)",
+    "accuracy": 0.8214285714285714,
+    "best_params": {
+      "C": 5.521326530612245
+    },
+    "average_time": 0.24786715030670167
+  },
+  {
+    "name": "Linear Model (ridge)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "alpha": 0.004701515151515151
+    },
+    "average_time": 0.00786418914794922
+  },
+  {
+    "name": "Linear Model (stochasitc gradient descent)",
+    "accuracy": 0,
+    "best_params": {
+      "loss": "squared hinge",
+      "alpha": 1e-07
+    },
+    "average_time": 0.00010911703109741211
+  },
+  {
+    "name": "Naive Bayes (Bernoulli)",
+    "accuracy": 0.36278195488721804,
+    "best_params": {
+      "alpha": 1.0101010101010101e-13
+    },
+    "average_time": 0.006468114852905274
+  },
+  {
+    "name": "k Nearest Neighbors",
+    "accuracy": 0.8026315789473685,
+    "best_params": {
+      "weights": "uniform",
+      "n_neighbors": 1
+    },
+    "average_time": 0.24394583702087402
+  },
+  {
+    "name": "Radius Neighbors",
+    "accuracy": 0.18796992481203006,
+    "best_params": {
+      "weights": "distance",
+      "radius": 2.1890909090909094
+    },
+    "average_time": 0.028360726833343505
+  },
+  {
+    "name": "Decision Tree",
+    "accuracy": 0.7330827067669173,
+    "best_params": {
+      "criterion": "log_loss",
+      "splitter": "best",
+      "max_features": 240,
+      "max_depth": 10,
+      "min_samples_split": 10,
+      "min_samples_leaf": 3
+    },
+    "average_time": 0.23940359015213816
+  },
+  {
+    "name": "Extra Tree",
+    "accuracy": 0.7161654135338346,
+    "best_params": {
+      "criterion": "gini",
+      "splitter": "best",
+      "max_features": 240,
+      "max_depth": 17,
+      "min_samples_split": 9,
+      "min_samples_leaf": 3
+    },
+    "average_time": 0.09764371470401162
+  }
+]
