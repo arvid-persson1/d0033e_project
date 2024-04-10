@@ -118,15 +118,6 @@
     "average_time": 0.008392424583435058
   },
   {
-    "name": "Linear Model (stochasitc gradient descent)",
-    "accuracy": 0,
-    "best_params": {
-      "loss": "squared hinge",
-      "alpha": 1e-05
-    },
-    "average_time": 9.974002838134765e-05
-  },
-  {
     "name": "Naive Bayes (Bernoulli)",
     "accuracy": 0.36278195488721804,
     "best_params": {

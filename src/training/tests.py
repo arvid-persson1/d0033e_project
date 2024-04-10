@@ -22,6 +22,14 @@ def dump(*results):
 
 # https://scikit-learn.org/stable/modules/classes.html
 
+def test_linear_model() -> Iterator[OptimizeResult]:
+    # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
+    yield optimize_parameters(
+        partial(linear_model.SGDClassifier, loss="squared_hinge"),
+        "Linear Model (stochasitc gradient descent)",
+        alpha=linspace(0.00175, 0.00185, 100)
+    )
+
 
 def test_neural_network() -> Iterator[OptimizeResult]:
     # There are a lot of parameters to vary here, so this will be expensive.
