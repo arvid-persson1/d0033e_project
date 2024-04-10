@@ -1,0 +1,56 @@
+[
+  {
+    "name": "SVM (C-support), polynomial (quadratic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.06948979591836735,
+      "coef0": 30.96938775510204
+    },
+    "average_time": 0.055349522972106935
+  },
+  {
+    "name": "SVM (C-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0005616326530612245,
+      "coef0": 50.44897959183674
+    },
+    "average_time": 0.055533818817138675
+  },
+  {
+    "name": "SVM (C-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 1.2666666666666667e-05,
+      "coef0": 43.833333333333336
+    },
+    "average_time": 0.05887808265686035
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quadratic)",
+    "accuracy": 0.8759398496240601,
+    "best_params": {
+      "nu": 7.916666666666668e-05,
+      "coef0": 4.825
+    },
+    "average_time": 0.037420620346069335
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (cubic)",
+    "accuracy": 0.8853383458646616,
+    "best_params": {
+      "nu": 5.1750000000000004e-06,
+      "coef0": 24.291666666666668
+    },
+    "average_time": 0.048327953338623046
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quartic)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "nu": 5.4033333333333334e-08,
+      "coef0": 30.1
+    },
+    "average_time": 0.04866673622131348
+  }
+]
