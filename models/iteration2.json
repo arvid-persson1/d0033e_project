@@ -1,0 +1,177 @@
+[
+  {
+    "name": "SVM (C-support), linear",
+    "accuracy": 0.8778195488721805,
+    "best_params": {
+      "C": 0.5
+    },
+    "average_time": 0.06321526527404785
+  },
+  {
+    "name": "SVM (C-support), polynomial (quadratic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.4,
+      "coef0": 10.526315789473685
+    },
+    "average_time": 0.05884922981262207
+  },
+  {
+    "name": "SVM (C-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0010615789473684212,
+      "coef0": 36.8421052631579
+    },
+    "average_time": 0.06205470144748688
+  },
+  {
+    "name": "SVM (C-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0005357894736842106,
+      "coef0": 32.10526315789474
+    },
+    "average_time": 0.06295487880706788
+  },
+  {
+    "name": "SVM (C-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "C": 2.4242424242424243
+    },
+    "average_time": 0.10743860721588135
+  },
+  {
+    "name": "SVM (C-support), sigmoid",
+    "accuracy": 0.8383458646616542,
+    "best_params": {
+      "C": 5.686868686868687
+    },
+    "average_time": 0.06366163730621338
+  },
+  {
+    "name": "SVM (Nu-support), linear",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "nu": 0.3212121212121212
+    },
+    "average_time": 0.07101766109466552
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quadratic)",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "nu": 0.0005357894736842106,
+      "coef0": 4.973684210526316
+    },
+    "average_time": 0.05846486508846283
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "nu": 1e-05,
+      "coef0": 22.105263157894736
+    },
+    "average_time": 0.06914612650871277
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "nu": 1e-05,
+      "coef0": 31.05263157894737
+    },
+    "average_time": 0.07707840383052826
+  },
+  {
+    "name": "SVM (Nu-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "nu": 0.011414141414141415
+    },
+    "average_time": 0.09723618984222412
+  },
+  {
+    "name": "SVM (Nu-support), sigmoid",
+    "accuracy": 0.8421052631578947,
+    "best_params": {
+      "nu": 0.33484848484848484
+    },
+    "average_time": 0.06605215549468994
+  },
+  {
+    "name": "Linear Model (passive aggressive)",
+    "accuracy": 0.8270676691729323,
+    "best_params": {
+      "C": 5.863636363636363
+    },
+    "average_time": 0.25014400959014893
+  },
+  {
+    "name": "Linear Model (ridge)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "alpha": 0.004752727272727273
+    },
+    "average_time": 0.00972257137298584
+  },
+  {
+    "name": "Linear Model (stochasitc gradient descent)",
+    "accuracy": 0.7725563909774437,
+    "best_params": {
+      "loss": "squared_hinge",
+      "alpha": 0.001675
+    },
+    "average_time": 0.15647740091596332
+  },
+  {
+    "name": "Naive Bayes (Bernoulli)",
+    "accuracy": 0.3609022556390977,
+    "best_params": {
+      "alpha": 1e-05
+    },
+    "average_time": 0.0060690069198608395
+  },
+  {
+    "name": "k Nearest Neighbors",
+    "accuracy": 0.8026315789473685,
+    "best_params": {
+      "n_neighbors": 1,
+      "weights": "uniform"
+    },
+    "average_time": 0.0352135475235756
+  },
+  {
+    "name": "Radius Neighbors",
+    "accuracy": 0.18796992481203006,
+    "best_params": {
+      "radius": 2.1969696969696972,
+      "weights": "distance"
+    },
+    "average_time": 0.019857373237609863
+  },
+  {
+    "name": "Decision Tree",
+    "accuracy": 0.7406015037593985,
+    "best_params": {
+      "criterion": "log_loss",
+      "splitter": "best",
+      "max_depth": 7,
+      "min_samples_split": 0.02
+    },
+    "average_time": 0.10819165549780194
+  },
+  {
+    "name": "Extra Tree",
+    "accuracy": 0.5845864661654135,
+    "best_params": {
+      "criterion": "gini",
+      "splitter": "best",
+      "max_depth": 16,
+      "min_samples_split": 0.01
+    },
+    "average_time": 0.011794152803588332
+  }
+]

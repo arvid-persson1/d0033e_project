@@ -162,7 +162,7 @@
   },
   {
     "name": "Extra Tree",
-    "accuracy": 0.7349624060150376,
+    "accuracy": 0.3609022556390977,
     "best_params": {
       "criterion": "log_loss",
       "splitter": "best"
