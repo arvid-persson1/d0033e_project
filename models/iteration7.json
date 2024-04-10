@@ -1,0 +1,72 @@
+[
+  {
+    "name": "SVM (C-support), polynomial (quadratic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.06979591836734694,
+      "coef0": 30.842105263157894
+    },
+    "average_time": 0.05915158176422119
+  },
+  {
+    "name": "SVM (C-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0005625,
+      "coef0": 50.416666666666664
+    },
+    "average_time": 0.05796778297424316
+  },
+  {
+    "name": "SVM (C-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 1.4e-05,
+      "coef0": 42.473684210526315
+    },
+    "average_time": 0.05846985399723053
+  },
+  {
+    "name": "SVM (C-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "C": 2.419848484848485
+    },
+    "average_time": 0.09741920232772827
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quadratic)",
+    "accuracy": 0.8778195488721805,
+    "best_params": {
+      "nu": 8.157894736842105e-05,
+      "coef0": 4.7
+    },
+    "average_time": 0.03944321095943451
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (cubic)",
+    "accuracy": 0.8853383458646616,
+    "best_params": {
+      "nu": 5.208333333333333e-06,
+      "coef0": 24.210526315789473
+    },
+    "average_time": 0.05200571489334106
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quartic)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "nu": 5.4125e-08,
+      "coef0": 30.083333333333332
+    },
+    "average_time": 0.04985317001342773
+  },
+  {
+    "name": "Linear Model (stochasitc gradient descent)",
+    "accuracy": 0,
+    "best_params": {
+      "alpha": 0.0
+    },
+    "average_time": 0.00010415792465209961
+  }
+]
