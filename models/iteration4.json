@@ -1,0 +1,146 @@
+[
+  {
+    "name": "SVM (C-support), linear",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "C": 0.0185
+    },
+    "average_time": 0.057982468605041505
+  },
+  {
+    "name": "SVM (C-support), polynomial (quadratic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.1,
+      "coef0": 21.666666666666664
+    },
+    "average_time": 0.058520185470581056
+  },
+  {
+    "name": "SVM (C-support), polynomial (cubic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 0.0006041666666666667,
+      "coef0": 48.94736842105263
+    },
+    "average_time": 0.05695370292663574
+  },
+  {
+    "name": "SVM (C-support), polynomial (quartic)",
+    "accuracy": 0.8834586466165414,
+    "best_params": {
+      "C": 1.8333333333333336e-05,
+      "coef0": 38.958333333333336
+    },
+    "average_time": 0.05903359184265137
+  },
+  {
+    "name": "SVM (C-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "C": 2.4214285714285713
+    },
+    "average_time": 0.10133289813995361
+  },
+  {
+    "name": "SVM (C-support), sigmoid",
+    "accuracy": 0.8383458646616542,
+    "best_params": {
+      "C": 5.683673469387755
+    },
+    "average_time": 0.06116729736328125
+  },
+  {
+    "name": "SVM (Nu-support), linear",
+    "accuracy": 0.8796992481203008,
+    "best_params": {
+      "nu": 0.32020408163265307
+    },
+    "average_time": 0.0662364673614502
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quadratic)",
+    "accuracy": 0.8778195488721805,
+    "best_params": {
+      "nu": 9.052631578947369e-05,
+      "coef0": 4.555555555555555
+    },
+    "average_time": 0.03570460677146912
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (cubic)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "nu": 6.6666666666666675e-06,
+      "coef0": 21.0
+    },
+    "average_time": 0.05145411729812622
+  },
+  {
+    "name": "SVM (Nu-support), polynomial (quartic)",
+    "accuracy": 0.8853383458646616,
+    "best_params": {
+      "nu": 3.130612244897959e-08,
+      "coef0": 30.210526315789473
+    },
+    "average_time": 0.04817355918884277
+  },
+  {
+    "name": "SVM (Nu-support), RBF",
+    "accuracy": 0.8665413533834586,
+    "best_params": {
+      "nu": 0.011408163265306122
+    },
+    "average_time": 0.0951428747177124
+  },
+  {
+    "name": "SVM (Nu-support), sigmoid",
+    "accuracy": 0.8421052631578947,
+    "best_params": {
+      "nu": 0.3348979591836735
+    },
+    "average_time": 0.06585888385772705
+  },
+  {
+    "name": "Linear Model (passive aggressive)",
+    "accuracy": 0.8214285714285714,
+    "best_params": {
+      "C": 5.522448979591837
+    },
+    "average_time": 0.24746403217315674
+  },
+  {
+    "name": "Linear Model (ridge)",
+    "accuracy": 0.8872180451127819,
+    "best_params": {
+      "alpha": 0.004704081632653061
+    },
+    "average_time": 0.008588480949401855
+  },
+  {
+    "name": "Linear Model (stochasitc gradient descent)",
+    "accuracy": 0,
+    "best_params": {
+      "loss": "squared hinge",
+      "alpha": 0.0001
+    },
+    "average_time": 0.00010915756225585937
+  },
+  {
+    "name": "Naive Bayes (Bernoulli)",
+    "accuracy": 0.36278195488721804,
+    "best_params": {
+      "alpha": 1e-09
+    },
+    "average_time": 0.006202094554901123
+  },
+  {
+    "name": "Radius Neighbors",
+    "accuracy": 0.18796992481203006,
+    "best_params": {
+      "weights": "distance",
+      "radius": 2.1893939393939394
+    },
+    "average_time": 0.024458081722259523
+  }
+]
