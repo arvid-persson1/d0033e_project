@@ -2,7 +2,15 @@ from training.tests import *
 
 
 def main():
-    test_neural_network()
+    dump(
+        *test_svc(),
+        *test_nu_svc(),
+        *test_linear_model(),
+        *test_naive_bayes(),
+        *test_neighbors(),
+        *test_neural_network(),
+        *test_tree()
+    )
 
 
 if __name__ == "__main__":

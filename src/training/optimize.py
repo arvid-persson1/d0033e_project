@@ -73,37 +73,17 @@ def __run_model(model: Callable[..., ClassifierMixin],
 @dataclass
 class OptimizeResult:
     """
-    A wrapper for the results of an optimization.
-
-    `params` contains the names of parameters and the best value found for them.
-
-    `accuracy` returns the accuracy of the model given `params`.
+    A wrapper class for the results of an optimization.
     """
 
-    params: Dict[str, float]
+    name: str
     accuracy: float
+    best_params: Dict[str, float]
     average_time: float
-
-    def display(self, name: str):
-        """
-        Prints the results of the optimization.
-        :param name: the name of the model.
-        """
-
-        print(name)
-        print(f"Accuracy: {(self.accuracy * 100):.2f}%")
-
-        print("Best parameters:")
-        for k, v in self.params.items():
-            if isinstance(v, float):
-                print(f"  {k}: {v:.3f}")
-            else:
-                print(f"  {k}: '{v}'")
-
-        print(f"Average time: {self.average_time:.2e}s\n")
 
 
 def optimize_parameters(model: Callable[..., ClassifierMixin],
+                        name: str,
                         preprocessor: Optional[Callable[[DataFrame], DataFrame]] = None,
                         **params: Sequence
                         ) -> OptimizeResult:
@@ -112,6 +92,7 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
     in given ranges. Warning: this operation can be very expensive.
     :param model: the constructor for the classifier to use.
     :param preprocessor: the preprocessing function to apply to the data before training, if any.
+    :param name: the name of the model, default is class name.
     :param params: all values to try for all the parameters to vary.
     For numeric paramters, these should likely be the results of a call to `numpy.linspace`.
     :return: the results of the optimization. See `OptimizeResult`.
@@ -149,4 +130,7 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
 
     end_time = time()
 
-    return OptimizeResult(bundle(best_config), best_accuracy, (end_time - start_time) / iterations)
+    return OptimizeResult(name,
+                          best_accuracy,
+                          bundle(best_config),
+                          (end_time - start_time) / iterations)
