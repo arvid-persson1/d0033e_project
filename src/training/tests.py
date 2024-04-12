@@ -22,25 +22,17 @@ def dump(*results):
 
 # https://scikit-learn.org/stable/modules/classes.html
 
-def test_linear_model() -> Iterator[OptimizeResult]:
-    # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
-    yield optimize_parameters(
-        partial(linear_model.SGDClassifier, loss="squared_hinge"),
-        "Linear Model (stochasitc gradient descent)",
-        alpha=linspace(0.00175, 0.00185, 100)
-    )
-
 
 def test_neural_network() -> Iterator[OptimizeResult]:
-    # There are a lot of parameters to vary here, so this will be expensive.
-    # To reduce this somewhat, let all layers have the same amount of neurons.
-    # TODO: try with varying amounts of neurons
-    # lbfgs and sgd do not converge in any reasonable number of iterations.
+    # lbfgs. sgd, identity and relu do not converge in any reasonable number of iterations.
     yield optimize_parameters(
-        neural_network.MLPClassifier,
+        # Even with this amount of iterations, sometimes warnings are raised.
+        # This is difficult to avoid without compromising accuracy.
+        partial(neural_network.MLPClassifier, max_iter=2500),
         "Neural Network (MLP)",
-        hidden_layer_sizes=tuple(full(n, k) for n in range(1, 10) for k in range(1, 100, 10)),
-        activation=("identity", "logistic", "tanh", "relu"),
+        # FIXME: type error
+        hidden_layer_sizes=tuple(full(n, k) for n in range(1, 5) for k in range(1, 300, 20)),
+        activation=("logistic", "tanh"),
         alpha=linspace(0.001, 10, 10)
     )
 
