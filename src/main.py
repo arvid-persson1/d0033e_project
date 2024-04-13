@@ -1,8 +1,8 @@
-from training.tests import *
+import preprocessing
 
 
 def main():
-    dump(*test_neural_network())
+    pass
 
 
 if __name__ == "__main__":
