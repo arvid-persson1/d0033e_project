@@ -1,7 +1,7 @@
 import pandas as pd
 
-__training = pd.read_csv("../data/training_processed.csv.csv")
-__testing = pd.read_csv("../data/testing_processed.csv.csv")
+__training = pd.read_csv("../data/training_processed.csv")
+__testing = pd.read_csv("../data/testing_processed.csv")
 
 # FIXME: remove when missing data is handled properly
 # __training = __training.dropna()

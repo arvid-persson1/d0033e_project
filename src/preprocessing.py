@@ -10,6 +10,8 @@ __testing_raw = pd.read_csv("../data/test.csv", names=tuple(Joint.headers()))
 
 
 def __process(row: pd.Series) -> pd.Series:
+    # TODO: normalize rotation, then position
+
     cs = np.array(row.iloc[30:30+3], dtype=np.float64)
     ls = np.array(row.iloc[6:6+3], dtype=np.float64)
     rs = np.array(row.iloc[9:9+3], dtype=np.float64)
