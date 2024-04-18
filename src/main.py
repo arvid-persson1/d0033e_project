@@ -2,8 +2,7 @@ from tests import *
 
 
 def main():
-    for result in test_svm():
-        print(result)
+    pass
 
 
 if __name__ == "__main__":

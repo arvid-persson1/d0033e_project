@@ -1,10 +1,11 @@
 import matplotlib
 from matplotlib import pyplot as plt
 
+from src.joints import Joint
+from data import *
+
 # Override default environment setting; display plot in new window.
 matplotlib.use("Qt5Agg")
-
-from data import *
 
 
 def visualize(index: int = 0, axes: bool = False):

@@ -35,7 +35,7 @@ class OptimizeResult:
     def __str__(self):
         return f"""
 Model: {self.model_name}
-Accuracy on training split: {(self.accuracy_training * 100):.1f}
+Accuracy on verification split: {(self.accuracy_training * 100):.1f}
 Accuracy on testing data: {(self.accuracy_testing * 100):.1f}
 Average runtime: {self.average_time:.1e} seconds
 Best parameters found:
@@ -75,7 +75,7 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
             return accuracy_score(verification_targets, classifier.predict(verification))
         except ValueError as e:
             with lock:
-                print(f"Error: {e}\nModel: {classifier}", file=sys.stderr)
+                print(f"Error: {e}\nModel: {classifier}\n", file=sys.stderr)
             return 0
 
     training = preprocessor(get_training_features())

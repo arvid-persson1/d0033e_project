@@ -6,19 +6,22 @@ from sklearn import *
 
 from optimize import optimize_parameters, OptimizeResult
 
+SEED = 1
+
+
 # https://scikit-learn.org/stable/modules/classes.html
 
 
 def test_svm() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="linear"),
+        partial(svm.NuSVC, kernel="linear", probability=False),
         "SVM, linear",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 100),
     )
 
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="poly", degree=2),
+        partial(svm.NuSVC, kernel="poly", degree=2, probability=False),
         "SVM, polynomial (quadratic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 20),
@@ -26,7 +29,7 @@ def test_svm() -> Iterator[OptimizeResult]:
     )
 
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="poly", degree=3),
+        partial(svm.NuSVC, kernel="poly", degree=3, probability=False),
         "SVM, polynomial (cubic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 20),
@@ -34,7 +37,7 @@ def test_svm() -> Iterator[OptimizeResult]:
     )
 
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="poly", degree=4),
+        partial(svm.NuSVC, kernel="poly", degree=4, probability=False),
         "SVM, polynomial (quartic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 20),
@@ -42,14 +45,14 @@ def test_svm() -> Iterator[OptimizeResult]:
     )
 
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="rbf"),
+        partial(svm.NuSVC, kernel="rbf", probability=False),
         "SVM, RBF",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 100)
     )
 
     yield optimize_parameters(
-        partial(svm.NuSVC, kernel="sigmoid"),
+        partial(svm.NuSVC, kernel="sigmoid", probability=False),
         "SVM, sigmoid",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
         nu=linspace(0.001, 1, 100)
@@ -58,20 +61,21 @@ def test_svm() -> Iterator[OptimizeResult]:
 
 def test_linear_model() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        linear_model.PassiveAggressiveClassifier,
+        partial(linear_model.PassiveAggressiveClassifier, random_state=SEED),
         "Linear Model (passive aggressive)",
         C=linspace(0.001, 10, 100)
     )
 
     yield optimize_parameters(
-        linear_model.RidgeClassifier,
+        partial(linear_model.RidgeClassifier, random_state=SEED),
         "Linear Model (ridge)",
-        alpha=linspace(0.001, 10, 100)
+        alpha=linspace(0.001, 10, 100),
+        solver=("auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs")
     )
 
     # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
     yield optimize_parameters(
-        partial(linear_model.SGDClassifier),
+        partial(linear_model.SGDClassifier, random_state=SEED),
         "Linear Model (passive aggressive)",
         loss=("hinge", "log_loss", "modified_huber", "squared_hinge",
               "perceptron", "huber", "epsilon_insensitive"),
@@ -107,19 +111,23 @@ def test_neighbors() -> Iterator[OptimizeResult]:
 
 def test_tree() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(tree.DecisionTreeClassifier, criterion="log_loss", splitter="best", max_features=240),
+        partial(tree.DecisionTreeClassifier, max_features=240),
         "Decision Tree",
-        max_depth=range(10, 20),
-        min_samples_split=range(1, 20),
-        min_samples_leaf=range(5)
+        criterion=("gini", "entropy", "log_loss"),
+        splitter=("best", "random"),
+        max_depth=range(1, 100, 10),
+        min_samples_split=range(1, 10, 5),
+        min_samples_leaf=range(1, 10, 5)
     )
 
     yield optimize_parameters(
-        partial(tree.ExtraTreeClassifier, criterion="gini", splitter="best", max_features=240),
+        partial(tree.ExtraTreeClassifier, max_features=240, random_state=SEED),
         "Extra Tree",
-        max_depth=range(10, 20),
-        min_samples_split=range(1, 20),
-        min_samples_leaf=range(5)
+        criterion=("gini", "entropy", "log_loss"),
+        splitter=("random", "best"),
+        max_depth=range(1, 100, 10),
+        min_samples_split=range(1, 10, 5),
+        min_samples_leaf=range(1, 10, 5)
     )
 
 
@@ -131,10 +139,49 @@ def test_neural_network() -> Iterator[OptimizeResult]:
         partial(neural_network.MLPClassifier, max_iter=2500),
         "Neural Network (MLP)",
         # FIXME: type error
-        hidden_layer_sizes=tuple(full(n, k) for n in range(1, 5) for k in range(1, 300, 20)),
+        # TODO: change these ranges
+        hidden_layer_sizes=tuple(full(n, k) for n in range(1, 5) for k in range(1, 300, 30)),
         activation=("logistic", "tanh"),
         alpha=linspace(0.001, 10, 10)
     )
 
 
-# TODO: ensembles
+def test_ensemble() -> Iterator[OptimizeResult]:
+    yield optimize_parameters(
+        partial(ensemble.ExtraTreesClassifier, max_features=240, random_state=SEED),
+        "Extra Trees",
+        criterion=("gini", "entropy", "log_loss"),
+        max_depth=range(1, 100, 10),
+        min_samples_split=range(1, 10, 5),
+        min_samples_leaf=range(1, 10, 5)
+    )
+
+    yield optimize_parameters(
+        partial(ensemble.RandomForestClassifier, max_features=240, random_state=SEED),
+        "Extra Trees",
+        criterion=("gini", "entropy", "log_loss"),
+        max_depth=range(1, 100, 10),
+        min_samples_split=range(1, 50, 5),
+        min_samples_leaf=range(1, 10, 5)
+    )
+
+    yield optimize_parameters(
+        partial(ensemble.GradientBoostingClassifier, max_features=240),
+        "Gradient Boosting",
+        loss=("log_loss", "exponential"),
+        n_estimators=range(1, 500, 50),
+        subsample=linspace(0.1, 1, 5),
+        criterion=("friedman_mse", "squared_error"),
+        min_samples_split=range(1, 10, 5),
+        min_samples_leaf=range(1, 10, 5)
+    )
+
+    yield optimize_parameters(
+        partial(ensemble.HistGradientBoostingClassifier, max_features=240),
+        "Histogram-based Gradient Boosting",
+        n_estimators=range(1, 500, 50),
+        subsample=linspace(0.1, 1, 5),
+        criterion=("friedman_mse", "squared_error"),
+        min_samples_split=range(1, 10, 5),
+        min_samples_leaf=range(1, 10, 5)
+    )
