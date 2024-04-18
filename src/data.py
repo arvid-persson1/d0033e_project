@@ -3,10 +3,6 @@ import pandas as pd
 __training = pd.read_csv("../data/training_processed.csv")
 __testing = pd.read_csv("../data/testing_processed.csv")
 
-# FIXME: remove when missing data is handled properly
-# __training = __training.dropna()
-# __testing = __testing.dropna()
-
 # Numeric values (positions and angles) are in columns 0-239,
 # gesture ID's are in column 241.
 __training_features = __training.iloc[:, range(240)]

@@ -43,6 +43,6 @@ def visualize(index: int = 0, axes: bool = False):
         ax.set_ylabel('Y Label')
         ax.set_zlabel('Z Label')
 
-    ax.view_init(elev=-90, azim=90)
+    ax.view_init(elev=90, azim=-90)
 
     plt.show()
