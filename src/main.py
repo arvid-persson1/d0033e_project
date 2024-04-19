@@ -1,6 +1,3 @@
-from tests import *
-
-
 def main():
     pass
 

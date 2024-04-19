@@ -11,8 +11,6 @@ __testing_features = __testing.iloc[:, range(240)]
 __testing_target = __testing.iloc[:, 241]
 
 
-# TODO: doc these?
-
 def get_training_data() -> pd.DataFrame:
     return __training
 
