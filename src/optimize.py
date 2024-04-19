@@ -33,8 +33,7 @@ class OptimizeResult:
     best_params: Dict[str, float]
 
     def __str__(self):
-        return f"""
-Model: {self.model_name}
+        return f"""Model: {self.model_name}
 Accuracy on verification split: {(self.accuracy_training * 100):.1f}
 Accuracy on testing data: {(self.accuracy_testing * 100):.1f}
 Average runtime: {self.average_time:.1e} seconds

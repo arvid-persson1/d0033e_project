@@ -17,45 +17,45 @@ def test_svm() -> Iterator[OptimizeResult]:
         partial(svm.NuSVC, kernel="linear", probability=False),
         "SVM, linear",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 100),
+        nu=linspace(0.33903, 0.33905, 1000),
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=2, probability=False),
         "SVM, polynomial (quadratic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 20),
-        coef0=linspace(-100, 100, 20)
+        nu=linspace(0.0004, 0.0005, 50),
+        coef0=linspace(0.55, 0.65, 50)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=3, probability=False),
         "SVM, polynomial (cubic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 20),
-        coef0=linspace(-100, 100, 20)
+        nu=linspace(0.3215, 0.3225, 50),
+        coef0=linspace(21.1, 21.3, 50)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="poly", degree=4, probability=False),
         "SVM, polynomial (quartic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 20),
-        coef0=linspace(-100, 100, 20)
+        nu=linspace(8e-9, 8.5e-9, 50),
+        coef0=linspace(35, 35.1, 50)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="rbf", probability=False),
         "SVM, RBF",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 100)
+        nu=linspace(0.000825, 0.000827, 1000)
     )
 
     yield optimize_parameters(
         partial(svm.NuSVC, kernel="sigmoid", probability=False),
         "SVM, sigmoid",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.001, 1, 100)
+        nu=linspace(0.40753, 0.407754, 1000)
     )
 
 

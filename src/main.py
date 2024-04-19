@@ -1,5 +1,9 @@
+from tests import *
+
+
 def main():
-    pass
+    for r in test_svm():
+        print(r)
 
 
 if __name__ == "__main__":
