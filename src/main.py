@@ -2,7 +2,7 @@ from tests import *
 
 
 def main():
-    for r in test_svm():
+    for r in test_neighbors():
         print(r)
 
 

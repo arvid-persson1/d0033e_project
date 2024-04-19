@@ -61,25 +61,22 @@ def test_svm() -> Iterator[OptimizeResult]:
 
 def test_linear_model() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(linear_model.PassiveAggressiveClassifier, random_state=SEED),
+        partial(linear_model.PassiveAggressiveClassifier, random_state=SEED, max_iter=2500),
         "Linear Model (passive aggressive)",
-        C=linspace(0.001, 10, 100)
+        C=linspace(0.00324, 0.00344, 100)
     )
 
     yield optimize_parameters(
-        partial(linear_model.RidgeClassifier, random_state=SEED),
+        partial(linear_model.RidgeClassifier, random_state=SEED, max_iter=2500, solver="lsqr"),
         "Linear Model (ridge)",
-        alpha=linspace(0.001, 10, 100),
-        solver=("auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs")
+        alpha=linspace(0.0007074, 0.0007275, 100)
     )
 
     # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
     yield optimize_parameters(
-        partial(linear_model.SGDClassifier, random_state=SEED),
+        partial(linear_model.SGDClassifier, random_state=SEED, max_iter=2500, loss="squared_hinge"),
         "Linear Model (passive aggressive)",
-        loss=("hinge", "log_loss", "modified_huber", "squared_hinge",
-              "perceptron", "huber", "epsilon_insensitive"),
-        alpha=linspace(0.001, 10, 25)
+        alpha=linspace(0.06265, 0.6985, 100)
     )
 
 
@@ -87,7 +84,7 @@ def test_naive_bayes() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=linspace(0.001, 10, 100)
+        alpha=linspace(0.05, 0.0501, 1000)
     )
 
     # Except for the Bernoulli model, Naive Bayes does not work with negative values.
@@ -95,17 +92,15 @@ def test_naive_bayes() -> Iterator[OptimizeResult]:
 
 def test_neighbors() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        neighbors.KNeighborsClassifier,
+        partial(neighbors.KNeighborsClassifier, weights="distance"),
         "k Nearest Neighbors",
-        n_neighbors=range(1, 100),
-        weights=("uniform", "distance")
+        n_neighbors=(1,)
     )
 
     yield optimize_parameters(
-        neighbors.RadiusNeighborsClassifier,
+        partial(neighbors.RadiusNeighborsClassifier, weights="distance"),
         "Radius Neighbors",
-        radius=linspace(0.001, 10, 100),
-        weights=("uniform", "distance")
+        radius=linspace(23.7, 24.6, 50)
     )
 
 
