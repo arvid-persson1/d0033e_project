@@ -2,7 +2,7 @@ from tests import *
 
 
 def main():
-    for r in test_neighbors():
+    for r in test_tree():
         print(r)
 
 
