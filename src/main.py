@@ -2,7 +2,7 @@ from tests import *
 
 
 def main():
-    for r in test_tree():
+    for r in test_neural_network():
         print(r)
 
 

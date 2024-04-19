@@ -121,17 +121,11 @@ def test_tree() -> Iterator[OptimizeResult]:
 
 
 def test_neural_network() -> Iterator[OptimizeResult]:
-    # lbfgs. sgd, identity and relu do not converge in any reasonable number of iterations.
     yield optimize_parameters(
-        # Even with this amount of iterations, sometimes warnings are raised.
-        # This is difficult to avoid without compromising accuracy.
-        partial(neural_network.MLPClassifier, max_iter=2500),
+        partial(neural_network.MLPClassifier, max_iter=2000, random_state=SEED,
+                activation="tanh", hidden_layer_sizes=(161,)),
         "Neural Network (MLP)",
-        # FIXME: type error
-        # TODO: change these ranges
-        hidden_layer_sizes=tuple(full(n, k) for n in range(1, 5) for k in range(1, 300, 30)),
-        activation=("logistic", "tanh"),
-        alpha=linspace(0.001, 10, 10)
+        alpha=linspace(2.341e-13, 4.339e-13, 10)
     )
 
 
