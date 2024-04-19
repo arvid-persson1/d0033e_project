@@ -106,23 +106,17 @@ def test_neighbors() -> Iterator[OptimizeResult]:
 
 def test_tree() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(tree.DecisionTreeClassifier, max_features=240),
+        partial(tree.DecisionTreeClassifier, max_features=240,
+                criterion="log_loss", splitter="best", min_samples_leaf=3, max_depth=28),
         "Decision Tree",
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("best", "random"),
-        max_depth=range(1, 100, 10),
-        min_samples_split=range(1, 10, 5),
-        min_samples_leaf=range(1, 10, 5)
+        min_samples_split=linspace(0.0002, 0.0003, 1000)
     )
 
     yield optimize_parameters(
-        partial(tree.ExtraTreeClassifier, max_features=240, random_state=SEED),
+        partial(tree.ExtraTreeClassifier, max_features=240, random_state=SEED,
+                criterion="entropy", splitter="best", min_samples_leaf=2, max_depth=7),
         "Extra Tree",
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("random", "best"),
-        max_depth=range(1, 100, 10),
-        min_samples_split=range(1, 10, 5),
-        min_samples_leaf=range(1, 10, 5)
+        min_samples_split=linspace(1e-12, 1e-9, 1000)
     )
 
 
