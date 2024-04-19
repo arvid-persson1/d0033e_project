@@ -129,42 +129,37 @@ def test_neural_network() -> Iterator[OptimizeResult]:
     )
 
 
-def test_ensemble() -> Iterator[OptimizeResult]:
+def test_forests() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(ensemble.ExtraTreesClassifier, max_features=240, random_state=SEED),
+        partial(ensemble.ExtraTreesClassifier, max_features=240, random_state=SEED,
+                criterion="entropy", max_depth=10),
         "Extra Trees",
-        criterion=("gini", "entropy", "log_loss"),
-        max_depth=range(1, 100, 10),
-        min_samples_split=range(1, 10, 5),
-        min_samples_leaf=range(1, 10, 5)
+        min_samples_split=linspace(4.14e-8, 6.15e-8, 50),
     )
 
     yield optimize_parameters(
-        partial(ensemble.RandomForestClassifier, max_features=240, random_state=SEED),
-        "Extra Trees",
-        criterion=("gini", "entropy", "log_loss"),
-        max_depth=range(1, 100, 10),
-        min_samples_split=range(1, 50, 5),
-        min_samples_leaf=range(1, 10, 5)
+        partial(ensemble.RandomForestClassifier, max_features=240, random_state=SEED,
+                criterion="gini", max_depth=10),
+        "Random Forest",
+        min_samples_split=linspace(3.13e-8, 5.14e-8, 50),
     )
 
+
+def test_gradient_boosting() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         partial(ensemble.GradientBoostingClassifier, max_features=240),
         "Gradient Boosting",
-        loss=("log_loss", "exponential"),
-        n_estimators=range(1, 500, 50),
-        subsample=linspace(0.1, 1, 5),
+        n_estimators=range(1, 501, 100),
+        subsample=linspace(0.1, 1, 3),
         criterion=("friedman_mse", "squared_error"),
-        min_samples_split=range(1, 10, 5),
-        min_samples_leaf=range(1, 10, 5)
+        min_samples_split=linspace(0.001, 1, 5),
+        min_samples_leaf=range(1, 11, 5)
     )
 
     yield optimize_parameters(
-        partial(ensemble.HistGradientBoostingClassifier, max_features=240),
+        partial(ensemble.HistGradientBoostingClassifier, max_leaf_nodes=240),
         "Histogram-based Gradient Boosting",
-        n_estimators=range(1, 500, 50),
-        subsample=linspace(0.1, 1, 5),
-        criterion=("friedman_mse", "squared_error"),
-        min_samples_split=range(1, 10, 5),
-        min_samples_leaf=range(1, 10, 5)
+        max_leaf_nodes=range(2, 100, 10),
+        learning_rate=linspace(0.01, 1, 10),
+        min_samples_leaf=range(1, 100, 10)
     )
