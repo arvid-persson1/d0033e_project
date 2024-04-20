@@ -25,12 +25,24 @@ __testing_targets = get_testing_targets()
 
 
 def predict_to_csv(path: str, *args, **kwargs):
-    copy = __testing_features.copy(False)
-    copy["PREDICTION"] = __model.predict(__testing_features)
-    copy["ACTUAL"] = __testing_targets
-    copy["CORRECT"] = copy["PREDICTION"] == copy["ACTUAL"]
+    df = __testing_features.copy(False)
+    df["LABEL"] = __testing_targets.apply(__gesture_name)
+    df["PREDICTION"] = __model.predict(__testing_features)
+    df["ACTUAL"] = __testing_targets
+    df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
-    copy.to_csv(path, index=False, *args, **kwargs)
+    df.to_csv(path, index=False, *args, **kwargs)
+
+
+def incorrect_to_csv(path: str, *args, **kwargs):
+    df = __testing_features.copy(False)
+    df["PREDICTION"] = __model.predict(__testing_features)
+    df["PREDICTION LABEL"] = df["PREDICTION"].apply(__gesture_name)
+    df["ACTUAL"] = __testing_targets
+    df["ACTUAL LABEL"] = df["ACTUAL"].apply(__gesture_name)
+    df = df[df["PREDICTION"] != df["ACTUAL"]]
+
+    df.to_csv(path, index=False, *args, **kwargs)
 
 
 def predict(count: int = 5, random_order: bool = True, visualize: bool = True):

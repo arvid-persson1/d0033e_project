@@ -2,7 +2,7 @@ from predict import *
 
 
 def main():
-    predict_to_csv("../data/predictions.csv")
+    predict()
 
 
 if __name__ == "__main__":
