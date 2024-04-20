@@ -95,6 +95,9 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
 
     # Train model with the training split
     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        # noinspection PyProtectedMember
+        used_threads = executor._max_workers
+
         lock = Lock()
         start_time = time()
 
@@ -115,5 +118,5 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
     return OptimizeResult(name,
                           accuracy_training,
                           accuracy_testing,
-                          (end_time - start_time) / iterations,
+                          (end_time - start_time) / iterations * used_threads,
                           best_parameters)

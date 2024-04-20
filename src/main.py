@@ -1,9 +1,8 @@
-from tests import *
+from predict import *
 
 
 def main():
-    for r in test_gradient_boosting():
-        print(r)
+    predict_to_csv("../data/predictions.csv")
 
 
 if __name__ == "__main__":
