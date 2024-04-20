@@ -147,19 +147,18 @@ def test_forests() -> Iterator[OptimizeResult]:
 
 def test_gradient_boosting() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
-        partial(ensemble.GradientBoostingClassifier, max_features=240),
+        partial(ensemble.GradientBoostingClassifier, max_features=240, criterion="friedman_mse"),
         "Gradient Boosting",
-        n_estimators=range(1, 501, 100),
-        subsample=linspace(0.1, 1, 3),
-        criterion=("friedman_mse", "squared_error"),
-        min_samples_split=linspace(0.001, 1, 5),
-        min_samples_leaf=range(1, 11, 5)
+        n_estimators=range(102, 300, 90),
+        subsample=linspace(0.4, 1, 3),
+        min_samples_split=linspace(1e-6, 1e-3, 3),
+        min_samples_leaf=range(7, 20, 5)
     )
 
     yield optimize_parameters(
-        partial(ensemble.HistGradientBoostingClassifier, max_leaf_nodes=240),
+        partial(ensemble.HistGradientBoostingClassifier),
         "Histogram-based Gradient Boosting",
-        max_leaf_nodes=range(2, 100, 10),
-        learning_rate=linspace(0.01, 1, 10),
-        min_samples_leaf=range(1, 100, 10)
+        max_leaf_nodes=range(2, 22, 6),
+        learning_rate=linspace(0.01, 0.5, 3),
+        min_samples_leaf=range(42, 81, 13)
     )
