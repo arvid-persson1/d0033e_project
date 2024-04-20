@@ -1,7 +1,7 @@
 from functools import partial
 from typing import Iterator
 
-from numpy import linspace, full
+from numpy import linspace
 from sklearn import *
 
 from optimize import optimize_parameters, OptimizeResult
@@ -149,16 +149,16 @@ def test_gradient_boosting() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         partial(ensemble.GradientBoostingClassifier, max_features=240, criterion="friedman_mse"),
         "Gradient Boosting",
-        n_estimators=range(102, 300, 90),
-        subsample=linspace(0.4, 1, 3),
-        min_samples_split=linspace(1e-6, 1e-3, 3),
-        min_samples_leaf=range(7, 20, 5)
+        n_estimators=range(283, 300, 5),
+        subsample=linspace(0.5, 0.7, 3),
+        min_samples_split=linspace(1e-9, 1e-6, 3),
+        min_samples_leaf=range(12, 17, 2)
     )
 
     yield optimize_parameters(
         partial(ensemble.HistGradientBoostingClassifier),
         "Histogram-based Gradient Boosting",
-        max_leaf_nodes=range(2, 22, 6),
-        learning_rate=linspace(0.01, 0.5, 3),
-        min_samples_leaf=range(42, 81, 13)
+        max_leaf_nodes=range(2, 8, 2),
+        learning_rate=linspace(0.1, 0.4, 3),
+        min_samples_leaf=range(42, 56, 4)
     )
