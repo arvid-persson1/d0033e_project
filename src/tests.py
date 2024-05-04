@@ -9,7 +9,7 @@ from optimize import optimize_parameters, OptimizeResult
 SEED = 1
 
 
-# https://scikit-learn.org/stable/modules/classes.html
+# These tests are for the final iteration of each model. For older tests, see the commit history on the respository.
 
 
 def test_svm() -> Iterator[OptimizeResult]:
