@@ -75,7 +75,7 @@ def test_linear_model() -> Iterator[OptimizeResult]:
     # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
     yield optimize_parameters(
         partial(linear_model.SGDClassifier, random_state=SEED, max_iter=2500, loss="squared_hinge"),
-        "Linear Model (passive aggressive)",
+        "Linear Model (stochastic gradient descent)",
         alpha=linspace(0.06265, 0.6985, 100)
     )
 
