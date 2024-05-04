@@ -129,7 +129,7 @@ def test_neural_network() -> Iterator[OptimizeResult]:
     )
 
 
-def test_forests() -> Iterator[OptimizeResult]:
+def test_ensemble() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         partial(ensemble.ExtraTreesClassifier, max_features=240, random_state=SEED,
                 criterion="entropy", max_depth=10),
@@ -144,8 +144,6 @@ def test_forests() -> Iterator[OptimizeResult]:
         min_samples_split=linspace(3.13e-8, 5.14e-8, 50),
     )
 
-
-def test_gradient_boosting() -> Iterator[OptimizeResult]:
     # GradientBoostingClassifier omitted due to performance intensity on larger datasets.
 
     yield optimize_parameters(
@@ -154,4 +152,16 @@ def test_gradient_boosting() -> Iterator[OptimizeResult]:
         max_leaf_nodes=range(2, 11, 2),
         learning_rate=linspace(0.1, 1, 5),
         min_samples_leaf=range(1, 100, 20)
+    )
+
+    yield optimize_parameters(
+        partial(ensemble.AdaBoostClassifier, random_state=SEED, algorithm="SAMME", n_estimators=427),
+        "AdaBoost",
+        learning_rate=linspace(5.93, 6.423, 100)
+    )
+
+    yield optimize_parameters(
+        partial(ensemble.BaggingClassifier, max_features=240, random_state=SEED, n_estimators=168),
+        "Bagging",
+        max_samples=linspace(0.489, 0.533, 100)
     )
