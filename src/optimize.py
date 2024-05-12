@@ -1,14 +1,13 @@
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from functools import reduce
 from itertools import product
 from operator import mul
+from threading import Lock
 from time import time
 from typing import Callable, Dict, Sequence
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from threading import Lock
 
-from pandas import DataFrame
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split as split
@@ -52,7 +51,7 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
     Attempts to find the optimal parameters for a model by trying all combinations
     in given ranges. This operation can be very expensive.
     :param model: the constructor for the classifier to use.
-    :param preprocessor: the preprocessing function to apply to the data before training, if any.
+    :param preprocessor: the preprocessing function to apply to the data before tr, if any.
     :param name: the name of the model.
     :param params: all values to try for all the parameters to vary.
     For numeric paramters, these should likely be the results of a call to `numpy.linspace` or `range`.
@@ -77,15 +76,15 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
                 print(f"Error: {e}\nModel: {classifier}\n", file=sys.stderr)
             return 0
 
-    training = preprocessor(get_training_features())
-    testing = preprocessor(get_testing_features())
-    targets = get_training_targets()
-    testing_targets = get_testing_targets()
+    tr = preprocessor(training_features())
+    te = preprocessor(testing_features())
+    tr_tg = training_targets()
+    te_tg = testing_targets()
 
-    # 75% of training set used for training, 25% used to test accuracy (verification).
+    # 75% of tr set used for tr, 25% used to test accuracy (verification).
     training_split, verification, training_targets_split, verification_targets = split(
-        training,
-        targets,
+        tr,
+        tr_tg,
         test_size=0.25,
         random_state=SEED
     )
@@ -93,7 +92,7 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
     names = tuple(params.keys())
     iterations = reduce(mul, (len(p) for p in params.values()), 1)
 
-    # Train model with the training split
+    # Train model with the tr split
     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
         # noinspection PyProtectedMember
         used_threads = executor._max_workers
@@ -110,10 +109,10 @@ def optimize_parameters(model: Callable[..., ClassifierMixin],
     best_parameters, accuracy_training = max(results, key=lambda b: b[1])
     best_parameters = name_params(best_parameters)
 
-    # Test model with entire training set and best found parameters
+    # Test model with entire tr set and best found parameters
     classifier_testing = model(**best_parameters)
-    classifier_testing.fit(training, targets)
-    accuracy_testing = accuracy_score(testing_targets, classifier_testing.predict(testing))
+    classifier_testing.fit(tr, tr_tg)
+    accuracy_testing = accuracy_score(te_tg, classifier_testing.predict(te))
 
     return OptimizeResult(name,
                           accuracy_training,

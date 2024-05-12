@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Iterator
+from typing import Iterator, Optional
 
 
 class Joint(Enum):
@@ -62,3 +62,41 @@ class Joint(Enum):
         # This is not the same as in the image since the joint numbers aren't the same.
         return [(12, 11), (12, 13), (12, 14), (11, 2), (2, 1), (2, 3), (2, 4), (3, 5), (5, 7), (7, 9),
                 (4, 6), (6, 8), (8, 10), (13, 15), (15, 17), (17, 19), (14, 16), (16, 18), (18, 20)]
+
+
+__gesture_names = {
+    1: "Afternoon",
+    2: "Baby",
+    3: "Big",
+    4: "Born",
+    5: "Bye",
+    6: "Calendar",
+    7: "Child",
+    8: "Cloud",
+    9: "Come",
+    10: "Daily",
+    11: "Dance",
+    12: "Dark",
+    13: "Day",
+    14: "Enjoy",
+    15: "Go",
+    16: "Hello",
+    17: "Home",
+    18: "Love",
+    19: "My",
+    20: "Name",
+    21: "No",
+    22: "Rain",
+    23: "Sorry",
+    24: "Strong",
+    25: "Study",
+    26: "Thank you",
+    27: "Welcome",
+    28: "Wind",
+    29: "Yes",
+    30: "You"
+}
+
+
+def gesture_name(gesture_id: int) -> Optional[str]:
+    return __gesture_names.get(gesture_id)
