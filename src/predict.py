@@ -1,8 +1,11 @@
 from random import randint
+from typing import Any
 
 import matplotlib
 from matplotlib import pyplot as plt
+from pandas import DataFrame
 from sklearn import *
+from sklearn.metrics import ConfusionMatrixDisplay
 
 from data import *
 from joints import Joint
@@ -24,25 +27,52 @@ __testing_features = get_testing_features()
 __testing_targets = get_testing_targets()
 
 
-def predict_to_csv(path: str, *args, **kwargs):
-    df = __testing_features.copy(False)
-    df["LABEL"] = __testing_targets.apply(__gesture_name)
+def get_predictions(include_labels: bool = True, include_features: bool = False, copy: bool = False) -> DataFrame:
+    """
+    Gets the predicted classes for all gestures along with the actual classes, using the best available model.
+    :param include_labels: whether to include the labels for the classes.
+    :param include_features: whether to include the features.
+    :param copy: whether to copy the features. Only used if `include_features` is enabled.
+    :return: A dataframe containing the predictions.
+    """
+
+    df = __testing_features.copy(copy) if include_features else DataFrame()
+
+    if include_labels:
+        df["GESTURE_LABEL"] = __testing_targets.apply(__gesture_name)
+
     df["PREDICTION"] = __model.predict(__testing_features)
     df["ACTUAL"] = __testing_targets
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
-    df.to_csv(path, index=False, *args, **kwargs)
+    return df
 
 
-def incorrect_to_csv(path: str, *args, **kwargs):
-    df = __testing_features.copy(False)
-    df["PREDICTION"] = __model.predict(__testing_features)
-    df["PREDICTION LABEL"] = df["PREDICTION"].apply(__gesture_name)
-    df["ACTUAL"] = __testing_targets
-    df["ACTUAL LABEL"] = df["ACTUAL"].apply(__gesture_name)
-    df = df[df["PREDICTION"] != df["ACTUAL"]]
+def get_incorrect(include_labels: bool = True, include_features: bool = False, copy: bool = False) -> DataFrame:
+    """
+    Gets only the entries which the best available model classified incorrectly.
+    :param include_labels: whether to include the labels for the classes.
+    :param include_features: whether to include the features.
+    :param copy: whether to copy the features. Only used if `include_features` is enabled.
+    :return: A dataframe containing the incorrect predictions.
+    """
 
-    df.to_csv(path, index=False, *args, **kwargs)
+    df = get_predictions(include_labels, include_features, copy)
+
+    df = df[~df["CORRECT"]]
+    df.drop(["CORRECT"], axis=1, inplace=True)
+
+    return df
+
+
+def get_confusion(normalize: Any = None) -> ConfusionMatrixDisplay:
+    """
+    Gets the confusion matrix.
+    :param normalize: how, if at all, to normalize the values. See `CunfusionMatrixDisplay.from_estimator`.
+    :return: A confusion matrix ready to be displayed.
+    """
+
+    return ConfusionMatrixDisplay.from_estimator(__model, __testing_features, __testing_targets, normalize=normalize)
 
 
 def predict(count: int = 5, random_order: bool = True, visualize: bool = True):

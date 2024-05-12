@@ -1,8 +1,5 @@
-from predict import *
-
-
 def main():
-    predict()
+    pass
 
 
 if __name__ == "__main__":
