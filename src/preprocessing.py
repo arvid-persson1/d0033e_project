@@ -25,6 +25,7 @@ def __process(row: pd.Series) -> pd.Series:
     # mag(k) is known to be 1
     theta = arccos(dot(n, k) / mag(n))
 
+    # Numpy likely has built-in optimized methods to these transformations.
     st = sin(theta)
     ct = cos(theta)
     rotation = array([

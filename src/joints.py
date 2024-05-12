@@ -24,63 +24,6 @@ class Joint(Enum):
     LEFT_FOOT = 19
     RIGHT_FOOT = 20
 
-    def number(self):
-        """
-        Gets the number associated with this joint in the data.
-        This is an alias for `self.value`
-        :return: the number associated with the joint.
-        """
-
-        return self.value
-
-    def image_number(self):
-        """
-        Gets the number associated with this joint in the image.
-        :return: the number associated with the joint.
-        """
-
-        match self:
-            case Joint.CENTER_HIP:
-                return 1
-            case Joint.SPINE:
-                return 2
-            case Joint.CENTER_SHOULDER:
-                return 3
-            case Joint.HEAD:
-                return 4
-            case Joint.LEFT_SHOULDER:
-                return 5
-            case Joint.LEFT_ELBOW:
-                return 6
-            case Joint.LEFT_WRIST:
-                return 7
-            case Joint.LEFT_HAND:
-                return 8
-            case Joint.RIGHT_SHOULDER:
-                return 9
-            case Joint.RIGHT_ELBOW:
-                return 10
-            case Joint.RIGHT_WRIST:
-                return 11
-            case Joint.RIGHT_HAND:
-                return 12
-            case Joint.LEFT_HIP:
-                return 13
-            case Joint.LEFT_KNEE:
-                return 14
-            case Joint.LEFT_ANKLE:
-                return 15
-            case Joint.LEFT_FOOT:
-                return 16
-            case Joint.RIGHT_HIP:
-                return 17
-            case Joint.RIGHT_KNEE:
-                return 18
-            case Joint.RIGHT_ANKLE:
-                return 19
-            case Joint.RIGHT_FOOT:
-                return 20
-
     @staticmethod
     def headers(include_candidate: bool = False) -> Iterator[str]:
         """
@@ -110,6 +53,7 @@ class Joint(Enum):
 
         yield "GESTURE_LABEL"
         yield "GESTURE_ID"
+
         if include_candidate:
             yield "CANDIDATE"
 

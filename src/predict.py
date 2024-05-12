@@ -1,5 +1,5 @@
 from random import randint
-from typing import Any
+from typing import Any, Optional
 
 import matplotlib
 from matplotlib import pyplot as plt
@@ -13,18 +13,14 @@ from joints import Joint
 # Override default environment setting; display plot in new window.
 matplotlib.use("Qt5Agg")
 
-__model = ensemble.ExtraTreesClassifier(
+MODEL = ensemble.ExtraTreesClassifier(
     max_features=240,
     criterion="gini",
     max_depth=14,
     random_state=92,
     min_samples_split=1e-4
 )
-__model.fit(get_training_features(), get_training_targets())
-
-__testing = get_testing_data()
-__testing_features = get_testing_features()
-__testing_targets = get_testing_targets()
+MODEL.fit(get_training_features(), get_training_targets())
 
 
 def get_predictions(include_labels: bool = True, include_features: bool = False, copy: bool = False) -> DataFrame:
@@ -36,13 +32,13 @@ def get_predictions(include_labels: bool = True, include_features: bool = False,
     :return: A dataframe containing the predictions.
     """
 
-    df = __testing_features.copy(copy) if include_features else DataFrame()
+    df = get_testing_features().copy(copy) if include_features else DataFrame()
 
     if include_labels:
-        df["GESTURE_LABEL"] = __testing_targets.apply(__gesture_name)
+        df["GESTURE_LABEL"] = get_testing_targets().apply(__gesture_name)
 
-    df["PREDICTION"] = __model.predict(__testing_features)
-    df["ACTUAL"] = __testing_targets
+    df["PREDICTION"] = MODEL.predict(get_testing_features())
+    df["ACTUAL"] = get_testing_targets()
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
     return df
@@ -72,23 +68,30 @@ def get_confusion(normalize: Any = None) -> ConfusionMatrixDisplay:
     :return: A confusion matrix ready to be displayed.
     """
 
-    return ConfusionMatrixDisplay.from_estimator(__model, __testing_features, __testing_targets, normalize=normalize)
+    return ConfusionMatrixDisplay.from_estimator(MODEL, get_testing_features(), get_testing_targets(), normalize=normalize)
 
 
-def predict(count: int = 5, random_order: bool = True, visualize: bool = True):
-    if random_order:
-        indices = (randint(0, 539) for _ in range(count))
-    else:
-        indices = range(count)
+def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
+    """
+    Predicts the classes of unseen testing samples using the best available model.
+    :param count: the number of samples to use.
+    :param random_order: whether to present a random selection of samples in a random order.
+    If this is disabled, starts from the first row.
+    :param visualize: whether to display the result as a plot.
+    If this is disabled, logs to stdout.
+    """
+
+    indices = (randint(0, 539) for _ in range(count)) if random_order else range(count)
 
     for index in indices:
-        prediction = __model.predict(__testing_features.iloc[[index]])[0]
-        target = __testing_targets[index]
+        prediction = MODEL.predict(get_testing_features().iloc[[index]])[0]
+        target = get_testing_targets()[index]
 
         if visualize:
-            xs = __testing.iloc[index, range(0, 60, 3)]
-            ys = __testing.iloc[index, range(1, 60, 3)]
-            zs = __testing.iloc[index, range(2, 60, 3)]
+            testing = get_testing_data()
+            xs = testing.iloc[index, range(0, 60, 3)]
+            ys = testing.iloc[index, range(1, 60, 3)]
+            zs = testing.iloc[index, range(2, 60, 3)]
 
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
@@ -125,67 +128,39 @@ def predict(count: int = 5, random_order: bool = True, visualize: bool = True):
                 print(f'{index}\tincorrect (guessed "{__gesture_name(prediction)}", was "{__gesture_name(target)}")')
 
 
-def __gesture_name(gesture_id: int) -> str:
-    match gesture_id:
-        case 1:
-            return "Afternoon"
-        case 2:
-            return "Baby"
-        case 3:
-            return "Big"
-        case 4:
-            return "Born"
-        case 5:
-            return "Bye"
-        case 6:
-            return "Calendar"
-        case 7:
-            return "Child"
-        case 8:
-            return "Cloud"
-        case 9:
-            return "Come"
-        case 10:
-            return "Daily"
-        case 11:
-            return "Dance"
-        case 12:
-            return "Dark"
-        case 13:
-            return "Day"
-        case 14:
-            return "Enjoy"
-        case 15:
-            return "Go"
-        case 16:
-            return "Hello"
-        case 17:
-            return "Home"
-        case 18:
-            return "Love"
-        case 19:
-            return "My"
-        case 20:
-            return "Name"
-        case 21:
-            return "No"
-        case 22:
-            return "Rain"
-        case 23:
-            return "Sorry"
-        case 24:
-            return "Strong"
-        case 25:
-            return "Study"
-        case 26:
-            return "Thank you"
-        case 27:
-            return "Welcome"
-        case 28:
-            return "Wind"
-        case 29:
-            return "Yes"
-        case 30:
-            return "You"
+__gesture_names = {
+    1: "Afternoon",
+    2: "Baby",
+    3: "Big",
+    4: "Born",
+    5: "Bye",
+    6: "Calendar",
+    7: "Child",
+    8: "Cloud",
+    9: "Come",
+    10: "Daily",
+    11: "Dance",
+    12: "Dark",
+    13: "Day",
+    14: "Enjoy",
+    15: "Go",
+    16: "Hello",
+    17: "Home",
+    18: "Love",
+    19: "My",
+    20: "Name",
+    21: "No",
+    22: "Rain",
+    23: "Sorry",
+    24: "Strong",
+    25: "Study",
+    26: "Thank you",
+    27: "Welcome",
+    28: "Wind",
+    29: "Yes",
+    30: "You"
+}
 
-    raise ValueError("Invalid gesture ID.")
+
+def __gesture_name(gesture_id: int) -> Optional[str]:
+    return __gesture_names.get(gesture_id)

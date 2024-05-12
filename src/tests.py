@@ -1,12 +1,11 @@
 from functools import partial
+from random import randint
 from typing import Iterator
 
 from numpy import linspace
 from sklearn import *
 
-from optimize import optimize_parameters, OptimizeResult
-
-SEED = 1
+from optimize import optimize_parameters, OptimizeResult, SEED
 
 
 # These tests are for the final iteration of each model. For older tests, see the commit history on the respository.
@@ -123,9 +122,30 @@ def test_tree() -> Iterator[OptimizeResult]:
 def test_neural_network() -> Iterator[OptimizeResult]:
     yield optimize_parameters(
         partial(neural_network.MLPClassifier, max_iter=2000, random_state=SEED,
+                activation="tanh", hidden_layer_sizes=(159, 159, 159)),
+        "Multilayer Perceptron (all hidden layers equal size)",
+        alpha=linspace(1e-6, 1e-5, 10)
+    )
+
+    yield optimize_parameters(
+        partial(neural_network.MLPClassifier, max_iter=2000, random_state=SEED,
                 activation="tanh", hidden_layer_sizes=(161,)),
-        "Neural Network (MLP)",
+        "Multilayer Perceptron (single hidden layer)",
         alpha=linspace(2.341e-13, 4.339e-13, 10)
+    )
+
+    min_layers = 1
+    max_layers = 3
+    min_neurons = 100
+    max_neurons = 300
+
+    yield optimize_parameters(
+        partial(neural_network.MLPClassifier, max_iter=2000, random_state=SEED,
+                activation="tanh", alpha=1e-7),
+        "Multilayer Perceptron (randomly sampled layouts)",
+        hidden_layer_sizes=tuple(tuple(randint(min_neurons, max_neurons)
+                                       for _ in range(randint(min_layers, max_layers)))
+                                 for _ in range(100))
     )
 
 
