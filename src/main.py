@@ -1,9 +1,5 @@
-from tests import test_neural_network
-
-
 def main():
-    for x in test_neural_network():
-        print(x)
+    pass
 
 
 if __name__ == "__main__":
