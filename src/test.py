@@ -15,6 +15,11 @@ def main():
         print("Usage: py test.py [model]")
         exit(1)
 
+    if model == "list":
+        for m in __tests.keys():
+            print(m)
+        exit(0)
+
     try:
         f = __tests[model]
     except KeyError:
