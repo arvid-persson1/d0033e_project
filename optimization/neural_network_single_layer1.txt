@@ -1,7 +1,0 @@
-Model: Multilayer Perceptron (single hidden layer)
-Accuracy on verification split: 69.6%
-Accuracy on testing data: 81.5%
-Average runtime: 1.2e+00 seconds
-Best parameters found:
-hidden_layer_sizes = (161,)
-alpha = 1e-07

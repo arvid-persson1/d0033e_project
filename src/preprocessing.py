@@ -1,6 +1,7 @@
 import pandas as pd
 from numpy import array, float64, cross, sin, cos, arccos, dot, append
 from numpy.linalg import norm as mag
+from sklearn.preprocessing import StandardScaler
 
 from joints import Joint
 
@@ -49,6 +50,10 @@ def __process(row: pd.Series) -> pd.Series:
 
 __training_raw = __training_raw.apply(__process, axis=1)
 __testing_raw = __testing_raw.apply(__process, axis=1)
+
+to_scale = list(range(240))
+__training_raw.iloc[:, to_scale] = StandardScaler().fit_transform(__training_raw.iloc[:, to_scale])
+__testing_raw.iloc[:, to_scale] = StandardScaler().fit_transform(__testing_raw.iloc[:, to_scale])
 
 __training_raw.to_csv("../data/training_processed.csv", index=False)
 __testing_raw.to_csv("../data/testing_processed.csv", index=False)

@@ -1,5 +1,9 @@
+from src.tests import test_tree
+
+
 def main():
-    pass
+    for x in test_tree():
+        print(x)
 
 
 if __name__ == "__main__":
