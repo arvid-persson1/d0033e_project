@@ -32,7 +32,7 @@ def svm_linear() -> OptimizeResult:
         partial(svm.NuSVC, kernel="linear", probability=False),
         "SVM, linear",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.33903, 0.33905, 1000),
+        nu=linspace(0.33903, 0.33905, 500),
     )
 
 
@@ -41,8 +41,8 @@ def svm_quad() -> OptimizeResult:
         partial(svm.NuSVC, kernel="poly", degree=2, probability=False),
         "SVM, polynomial (quadratic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.0004, 0.0005, 50),
-        coef0=linspace(0.55, 0.65, 50)
+        nu=linspace(0.0004, 0.0005, 25),
+        coef0=linspace(0.55, 0.65, 25)
     )
 
 
@@ -51,8 +51,8 @@ def svm_cub() -> OptimizeResult:
         partial(svm.NuSVC, kernel="poly", degree=3, probability=False),
         "SVM, polynomial (cubic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.3215, 0.3225, 50),
-        coef0=linspace(21.1, 21.3, 50)
+        nu=linspace(0.3215, 0.3225, 25),
+        coef0=linspace(21.1, 21.3, 25)
     )
 
 
@@ -61,8 +61,8 @@ def svm_quar() -> OptimizeResult:
         partial(svm.NuSVC, kernel="poly", degree=4, probability=False),
         "SVM, polynomial (quartic)",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(8e-9, 8.5e-9, 50),
-        coef0=linspace(35, 35.1, 50)
+        nu=linspace(8e-9, 8.5e-9, 25),
+        coef0=linspace(35, 35.1, 25)
     )
 
 
@@ -71,7 +71,7 @@ def svm_rbf() -> OptimizeResult:
         partial(svm.NuSVC, kernel="rbf", probability=False),
         "SVM, RBF",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.000825, 0.000827, 1000)
+        nu=linspace(0.000825, 0.000827, 500)
     )
 
 
@@ -80,7 +80,7 @@ def test_svm() -> OptimizeResult:
         partial(svm.NuSVC, kernel="sigmoid", probability=False),
         "SVM, sigmoid",
         lambda df: preprocessing.StandardScaler().fit_transform(df),
-        nu=linspace(0.40753, 0.407754, 1000)
+        nu=linspace(0.40753, 0.407754, 500)
     )
 
 
@@ -88,7 +88,7 @@ def linear_model_pa() -> OptimizeResult:
     return optimize_parameters(
         partial(linear_model.PassiveAggressiveClassifier, random_state=SEED, max_iter=2500),
         "Linear Model (passive aggressive)",
-        C=linspace(0.00324, 0.00344, 100)
+        C=linspace(0.00324, 0.00344, 50)
     )
 
 
@@ -96,7 +96,7 @@ def linear_model_ridge() -> OptimizeResult:
     return optimize_parameters(
         partial(linear_model.RidgeClassifier, random_state=SEED, max_iter=2500, solver="lsqr"),
         "Linear Model (ridge)",
-        alpha=linspace(0.0007074, 0.0007275, 100)
+        alpha=linspace(0.0007074, 0.0007275, 50)
     )
 
 
@@ -105,7 +105,7 @@ def linear_model_sgd() -> OptimizeResult:
     return optimize_parameters(
         partial(linear_model.SGDClassifier, random_state=SEED, max_iter=2500, loss="squared_hinge"),
         "Linear Model (stochastic gradient descent)",
-        alpha=linspace(0.06265, 0.6985, 100)
+        alpha=linspace(0.06265, 0.6985, 50)
     )
 
 
@@ -113,7 +113,7 @@ def naive_bayes() -> OptimizeResult:
     return optimize_parameters(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=linspace(0.05, 0.0501, 1000)
+        alpha=linspace(0.05, 0.0501, 500)
     )
 
 
@@ -138,7 +138,7 @@ def decision_tree() -> OptimizeResult:
         partial(tree.DecisionTreeClassifier, max_features=240,
                 criterion="log_loss", splitter="best", min_samples_leaf=3, max_depth=28),
         "Decision Tree",
-        min_samples_split=linspace(0.0002, 0.0003, 1000)
+        min_samples_split=linspace(0.0002, 0.0003, 500)
     )
 
 
@@ -147,7 +147,7 @@ def extra_tree() -> OptimizeResult:
         partial(tree.ExtraTreeClassifier, max_features=240, random_state=SEED,
                 criterion="entropy", splitter="best", min_samples_leaf=2, max_depth=7),
         "Extra Tree",
-        min_samples_split=linspace(1e-12, 1e-9, 1000)
+        min_samples_split=linspace(1e-12, 1e-9, 500)
     )
 
 
@@ -181,7 +181,7 @@ def nn_random() -> OptimizeResult:
         "Multilayer Perceptron (randomly sampled layouts)",
         hidden_layer_sizes=tuple(tuple(randint(min_neurons, max_neurons)
                                        for _ in range(randint(min_layers, max_layers)))
-                                 for _ in range(100))
+                                 for _ in range(10))
     )
 
 
@@ -209,7 +209,7 @@ def grad_boost() -> OptimizeResult:
         "Histogram-based Gradient Boosting",
         max_leaf_nodes=range(2, 11, 2),
         learning_rate=linspace(0.1, 1, 5),
-        min_samples_leaf=range(1, 100, 20)
+        min_samples_leaf=range(1, 100, 25)
     )
 
 
@@ -217,7 +217,7 @@ def ada_boost() -> OptimizeResult:
     return optimize_parameters(
         partial(ensemble.AdaBoostClassifier, random_state=SEED, algorithm="SAMME", n_estimators=427),
         "AdaBoost",
-        learning_rate=linspace(5.93, 6.423, 100)
+        learning_rate=linspace(5.93, 6.423, 50)
     )
 
 
@@ -225,7 +225,7 @@ def bagging() -> OptimizeResult:
     return optimize_parameters(
         partial(ensemble.BaggingClassifier, max_features=240, random_state=SEED, n_estimators=168),
         "Bagging",
-        max_samples=linspace(0.489, 0.533, 100)
+        max_samples=linspace(0.489, 0.533, 50)
     )
 
 
