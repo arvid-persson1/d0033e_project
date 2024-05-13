@@ -21,12 +21,14 @@ MODEL = ensemble.ExtraTreesClassifier(
 MODEL.fit(training_features(), training_targets())
 
 
-def predictions(include_labels: bool = True, include_features: bool = False, copy: bool = False) -> DataFrame:
+def predictions(include_labels: bool = True, include_features: bool = False,
+                copy: bool = False, sort: bool = False) -> DataFrame:
     """
     Gets the predicted classes for all gestures along with the actual classes, using the best available model.
     :param include_labels: whether to include the labels for the classes.
     :param include_features: whether to include the features.
     :param copy: whether to copy the features. Only used if `include_features` is enabled.
+    :param sort: whether to sort the data.
     :return: A dataframe containing the predictions.
     """
 
@@ -39,19 +41,24 @@ def predictions(include_labels: bool = True, include_features: bool = False, cop
     df["ACTUAL"] = testing_targets()
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
+    if sort:
+        df.sort_values("GESTURE_LABEL", inplace=True)
+
     return df
 
 
-def predictions_incorrect(include_labels: bool = True, include_features: bool = False, copy: bool = False) -> DataFrame:
+def predictions_incorrect(include_labels: bool = True, include_features: bool = False,
+                          copy: bool = False, sort: bool = False) -> DataFrame:
     """
     Gets only the entries which the best available model classified incorrectly.
     :param include_labels: whether to include the labels for the classes.
     :param include_features: whether to include the features.
     :param copy: whether to copy the features. Only used if `include_features` is enabled.
+    :param sort: whether to sort the data.
     :return: A dataframe containing the incorrect predictions.
     """
 
-    df = predictions(include_labels, include_features, copy)
+    df = predictions(include_labels, include_features, copy, sort)
 
     df = df[~df["CORRECT"]]
     df.drop(["CORRECT"], axis=1, inplace=True)
