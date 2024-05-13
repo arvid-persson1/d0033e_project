@@ -1,5 +1,5 @@
 from random import randint
-from sys import argv
+from sys import argv, exit
 
 from matplotlib import pyplot as plt
 from sklearn import ensemble
@@ -18,7 +18,16 @@ MODEL.fit(training_features(), training_targets())
 
 
 def main():
-    predict()
+    if len(argv) == 2:
+        try:
+            count = int(argv[1])
+        except ValueError:
+            print("Usage: py visualize.py [count]?")
+            exit(1)
+    else:
+        count = 1
+
+    predict(count)
 
 
 def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
