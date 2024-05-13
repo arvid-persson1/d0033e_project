@@ -1,18 +1,19 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
-from functools import reduce
 from itertools import product
 from sys import stderr
 from threading import Lock
 from time import time
-from typing import Callable, Dict, Any
+from typing import Callable, Dict, Any, Iterable
 
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split as split
+from sklearn.preprocessing import StandardScaler
 
 from data import *
 
+# Used for splitting the datasets.
 SEED = 1
 # Leave as None to use all available threads.
 MAX_THREADS = None
@@ -41,22 +42,25 @@ Best parameters found:
 
 
 # noinspection PyUnresolvedReferences,PyArgumentList
-def optimize_parameters(model: Callable[..., ClassifierMixin], name: str, **params: Iterator) -> OptimizeResult:
+def optimize(model: Callable[..., ClassifierMixin], name: str, *, scale_data: bool = False,
+             num_trials: int = 1, **params: Iterable[Any]) -> OptimizeResult:
     """
     Attempts to find the optimal parameters for a model by trying all combinations
     in given ranges. This operation can be very expensive.
     :param model: the constructor for the classifier to use.
     :param name: the name of the model.
+    :param scale_data: whether to scale the data before training.
     :param params: all values to try for all the parameters to vary.
-    For numeric paramters, these should likely be the results of a call to `numpy.linspace` or `range`.
+    :param num_trials: the number of trials to run to account for random variation.
+    The median result is returned.
     :return: the results of the optimization. See `OptimizeResult`.
     """
 
-    def name_params(values):
-        return dict(zip(names, values))
+    def name_params(values: Iterable[Any]) -> dict[str, Any]:
+        return dict(zip(params.keys(), values))
 
     # noinspection PyUnresolvedReferences,PyArgumentList
-    def run(**config):
+    def run(**config) -> float:
         try:
             classifier = model(**config)
         except TypeError as e:
@@ -75,10 +79,14 @@ def optimize_parameters(model: Callable[..., ClassifierMixin], name: str, **para
     trn_tg = training_targets()
     tst_tg = testing_targets()
 
+    if scale_data:
+        trn_ft = StandardScaler().fit_transform(trn_ft)
+        tst_ft = StandardScaler().fit_transform(tst_ft)
+
     # 75% for training, 25% for validation.
     trn_ft, val_ft, trn_tg, val_tg = split(trn_ft, trn_tg, test_size=0.25, random_state=SEED)
 
-    names = tuple(params.keys())
+    results = []
 
     # Train model with the training split
     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
@@ -88,14 +96,19 @@ def optimize_parameters(model: Callable[..., ClassifierMixin], name: str, **para
 
         start_time = time()
 
-        futures = (executor.submit(lambda c: (c, run(**name_params(c))), config)
-                   for config in product(*params.values()))
-        # Need to collect all values to await execution.
-        results = tuple(future.result() for future in as_completed(futures))
+        for _ in range(num_trials):
+            futures = (executor.submit(lambda c: (c, run(**name_params(c))), config)
+                       for config in product(*params.values()))
+            # Need to collect all values to await execution.
+            results.append(tuple(future.result() for future in as_completed(futures)))
 
         end_time = time()
 
-    best_parameters, trn_acc = max(results, key=lambda b: b[1])
+    results = sorted((max(result, key=lambda t: t[1]) for result in results),
+                     key=lambda t: t[1], reverse=True)
+    median_case = results[len(results) // 2]
+
+    best_parameters, trn_acc = median_case
     best_parameters = name_params(best_parameters)
 
     # Test model with entire training set and best found parameters
@@ -106,5 +119,5 @@ def optimize_parameters(model: Callable[..., ClassifierMixin], name: str, **para
     return OptimizeResult(name,
                           trn_acc,
                           tst_acc,
-                          (end_time - start_time) / (len(results) * used_threads),
+                          (end_time - start_time) / (len(results) * used_threads * num_trials),
                           best_parameters)

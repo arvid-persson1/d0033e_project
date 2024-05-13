@@ -1,15 +1,15 @@
-import pandas as pd
 from numpy import array, float64, cross, sin, cos, arccos, dot, append
 from numpy.linalg import norm as mag
+from pandas import read_csv, Series, concat
 from sklearn.preprocessing import StandardScaler
 
 from joints import Joint
 
-__training_raw = pd.read_csv("../data/training_filled.csv", names=tuple(Joint.headers()))
-__testing_raw = pd.read_csv("../data/testing_filled.csv", names=tuple(Joint.headers()))
+__training_raw = read_csv("../data/training_filled.csv", names=tuple(Joint.headers()))
+__testing_raw = read_csv("../data/testing_filled.csv", names=tuple(Joint.headers()))
 
 
-def __process(row: pd.Series) -> pd.Series:
+def __process(row: Series) -> Series:
     cs = array(row.iloc[30:30 + 3], dtype=float64)
     ls = array(row.iloc[6:6 + 3], dtype=float64)
     rs = array(row.iloc[9:9 + 3], dtype=float64)
@@ -50,10 +50,6 @@ def __process(row: pd.Series) -> pd.Series:
 
 __training_raw = __training_raw.apply(__process, axis=1)
 __testing_raw = __testing_raw.apply(__process, axis=1)
-
-to_scale = list(range(240))
-__training_raw.iloc[:, to_scale] = StandardScaler().fit_transform(__training_raw.iloc[:, to_scale])
-__testing_raw.iloc[:, to_scale] = StandardScaler().fit_transform(__testing_raw.iloc[:, to_scale])
 
 __training_raw.to_csv("../data/training_processed.csv", index=False)
 __testing_raw.to_csv("../data/testing_processed.csv", index=False)

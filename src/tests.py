@@ -1,15 +1,16 @@
 from random import randint
 from typing import Tuple
 
-from numpy import linspace
+from numpy import linspace, logspace
 from sklearn import *
 
-from optimize import optimize_parameters, OptimizeResult, SEED
+from optimize import optimize, OptimizeResult
 
 
 class Just:
     """
     Represents an iterator yielding just a single value.
+    More explicit than constructing 1-length tuples.
     """
 
     def __init__(self, value):
@@ -27,251 +28,264 @@ class Just:
             raise StopIteration
 
 
-# These tests are for the final iteration of each model. For older tests, see the commit history on the respository.
-
-
 def svm_linear() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, linear",
+        scale_data=True,
         kernel=Just("linear"),
         probability=Just(False),
-        nu=linspace(0.33903, 0.33905, 500)
+        nu=linspace(1e-15, 1, 1000)
     )
 
 
 def svm_quad() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, polynomial (quadratic)",
+        scale_data=True,
         kernel=Just("poly"),
         degree=Just(2),
         probability=Just(False),
-        nu=linspace(0.0004, 0.0005, 25),
-        coef0=linspace(0.55, 0.65, 25)
+        nu=linspace(1e-15, 1, 25),
+        coef0=linspace(-100, 100, 25)
     )
 
 
 def svm_cub() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, polynomial (cubic)",
+        scale_data=True,
         kernel=Just("poly"),
         degree=Just(3),
         probability=Just(False),
-        nu=linspace(0.3215, 0.3225, 25),
-        coef0=linspace(21.1, 21.3, 25)
+        nu=linspace(1e-15, 1, 25),
+        coef0=linspace(-100, 100, 25)
     )
 
 
 def svm_quar() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, polynomial (quartic)",
+        scale_data=True,
         kernel=Just("poly"),
         degree=Just(4),
         probability=Just(False),
-        nu=linspace(8e-9, 8.5e-9, 25),
-        coef0=linspace(35, 35.1, 25)
+        nu=linspace(1e-15, 1, 25),
+        coef0=linspace(-1000, 1000, 25)
     )
 
 
 def svm_rbf() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, RBF",
+        scale_data=True,
         kernel=Just("rbf"),
         probability=Just(False),
-        nu=linspace(0.000825, 0.000827, 500)
+        nu=linspace(1e-15, 1, 1000)
     )
 
 
 def svm_sigmoid() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         svm.NuSVC,
         "SVM, sigmoid",
+        scale_data=True,
         kernel=Just("sigmoid"),
         probability=Just(False),
-        nu=linspace(0.40753, 0.407754, 500)
+        nu=linspace(1e-15, 1, 1000)
     )
 
 
 def linear_model_pa() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         linear_model.PassiveAggressiveClassifier,
         "Linear Model (passive aggressive)",
-        random_state=Just(SEED),
-        max_iter=Just(2500),
-        C=linspace(0.00324, 0.00344, 50)
+        scale_data=True,
+        num_trials=5,
+        C=logspace(1e-15, 1000, 200)
     )
 
 
 def linear_model_ridge() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         linear_model.RidgeClassifier,
         "Linear Model (ridge)",
-        random_state=Just(SEED),
-        max_iter=Just(2500),
-        solver=Just("lsqr"),
-        alpha=linspace(0.0007074, 0.0007275, 50)
+        scale_data=True,
+        num_trials=5,
+        alpha=logspace(1e-15, 1000, 25),
+        solver=("auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs")
     )
 
 
 def linear_model_sgd() -> OptimizeResult:
-    # squared_error and squared_epsilon_insensitive do not converge in any reasonable number of iterations.
-    return optimize_parameters(
+    return optimize(
         linear_model.SGDClassifier,
         "Linear Model (stochastic gradient descent)",
-        random_state=Just(SEED),
-        max_iter=Just(2500),
-        loss=Just("squared_hinge"),
-        alpha=linspace(0.06265, 0.6985, 50)
+        scale_data=True,
+        num_trials=5,
+        alpha=logspace(1e-15, 1000, 10),
+        loss=("hinge", "log_loss", "modified_huber", "squared_hinge", "perceptron",
+              "squared_error", "huber", "epsilon_insensitive", "squared_epsilon_insensitive"),
+        penalty=("l1", "l2", "elasticnet", None)
     )
 
 
 def naive_bayes() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=linspace(0.05, 0.0501, 500)
+        alpha=logspace(1e-15, 1000, 1000)
     )
 
 
 def knn() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         neighbors.KNeighborsClassifier,
         "k Nearest Neighbors",
-        weights=Just("distance"),
-        n_neighbors=Just(1)
+        scale_data=True,
+        n_neighbors=range(1, 101),
+        weights=("uniform", "distance")
     )
 
 
 def radius_neighbors() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         neighbors.RadiusNeighborsClassifier,
         "Radius Neighbors",
-        weights=Just("distance"),
-        radius=linspace(23.7, 24.6, 50)
+        scale_data=True,
+        radius=logspace(1e-15, 1000, 500),
+        weights=("uniform", "distance")
     )
 
 
 def decision_tree() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         tree.DecisionTreeClassifier,
         "Decision Tree",
-        max_features=Just(240),
-        criterion=Just("log_loss"),
-        splitter=Just("best"),
-        min_samples_leaf=Just(3),
-        max_depth=Just(28),
-        min_samples_split=linspace(0.0002, 0.0003, 500)
+        num_trials=5,
+        criterion=("gini", "entropy", "log_loss"),
+        splitter=("best", "random"),
+        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
+        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
+        max_features=("log2", "sqrt", None)
     )
 
 
 def extra_tree() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         tree.ExtraTreeClassifier,
         "Extra Tree",
-        max_features=Just(240),
-        random_state=Just(SEED),
-        criterion=Just("entropy"),
-        splitter=Just("best"),
-        min_samples_leaf=Just(2),
-        max_depth=Just(7),
-        min_samples_split=linspace(1e-12, 1e-9, 500)
+        num_trials=5,
+        criterion=("gini", "entropy", "log_loss"),
+        splitter=("best", "random"),
+        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
+        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
+        max_features=("log2", "sqrt", None)
     )
 
 
 def nn_equal() -> OptimizeResult:
-    return optimize_parameters(
+    def equal_layers(count: int, size: int) -> Tuple[int, ...]:
+        return tuple(size for _ in range(count))
+
+    return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (all hidden layers equal size)",
-        max_iter=Just(2000),
-        random_state=Just(SEED),
-        activation=Just("tanh"),
-        hidden_layer_sizes=Just((159, 159, 159)),
-        alpha=linspace(1e-6, 1e-5, 10)
+        scale_data=True,
+        num_trials=5,
+        hidden_layer_sizes=(equal_layers(count, size) for count in range(1, 11, 3) for size in range(1, 502, 100)),
+        activation=("identity", "logistic", "tanh", "relu"),
+        alpha=logspace(1e-15, 1000, 5)
     )
 
 
 def nn_single() -> OptimizeResult:
-    return optimize_parameters(
+    def single_layer(size: int) -> Tuple[int]:
+        return (size,)
+
+    return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (single hidden layer)",
-        max_iter=Just(2000),
-        random_state=Just(SEED),
-        activation=Just("tanh"),
-        hidden_layer_sizes=Just((161,)),
-        alpha=linspace(2.341e-13, 4.339e-13, 10)
+        scale_data=True,
+        num_trials=5,
+        hidden_layer_sizes=(single_layer(size) for size in range(1, 502, 50)),
+        activation=("identity", "logistic", "tanh", "relu"),
+        alpha=logspace(1e-15, 1000, 5)
     )
 
 
 def nn_random() -> OptimizeResult:
-    def random_layers(min_layers, max_layers, min_neurons, max_neurons) -> Tuple[int, ...]:
+    def random_layers(min_layers: int, max_layers: int, min_neurons: int, max_neurons: int) -> Tuple[int, ...]:
         return tuple(randint(min_neurons, max_neurons) for _ in range(randint(min_layers, max_layers)))
 
-    return optimize_parameters(
+    return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (randomly sampled layouts)",
+        scale_data=True,
         max_iter=Just(2000),
-        random_state=Just(SEED),
-        activation=Just("tanh"),
-        alpha=Just(1e-7),
-        hidden_layer_sizes=Just((random_layers(1, 3, 100, 300) for _ in range(10)))
-    )
-
-
-def extra_trees() -> OptimizeResult:
-    return optimize_parameters(
-        ensemble.ExtraTreesClassifier,
-        "Extra Trees",
-        max_features=Just(240),
-        random_state=Just(SEED),
-        criterion=Just("entropy"),
-        max_depth=Just(10),
-        min_samples_split=linspace(4.14e-8, 6.15e-8, 50),
+        num_trials=5,
+        hidden_layer_sizes=(random_layers(1, 10, 1, 500) for _ in range(50)),
+        activation=("identity", "logistic", "tanh", "relu"),
+        alpha=logspace(1e-15, 1000, 5)
     )
 
 
 def random_forest() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         ensemble.RandomForestClassifier,
         "Random Forest",
-        max_features=Just(240),
-        random_state=Just(SEED),
-        criterion=Just("gini"),
-        max_depth=Just(10),
-        min_samples_split=linspace(3.13e-8, 5.14e-8, 50),
+        num_trials=5,
+        criterion=("gini", "entropy", "log_loss"),
+        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
+        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
+        max_features=("log2", "sqrt", None),
+        bootstrap=(True, False)
+    )
+
+
+def extra_trees() -> OptimizeResult:
+    return optimize(
+        ensemble.ExtraTreesClassifier,
+        "Extra Trees",
+        num_trials=5,
+        criterion=("gini", "entropy", "log_loss"),
+        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
+        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
+        max_features=("log2", "sqrt", None),
+        bootstrap=(True, False)
     )
 
 
 def grad_boost() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         ensemble.HistGradientBoostingClassifier,
         "Histogram-based Gradient Boosting",
-        max_leaf_nodes=range(2, 11, 2),
-        learning_rate=linspace(0.1, 1, 5),
-        min_samples_leaf=range(1, 100, 25)
+        max_leaf_nodes=Just(None),
+        learning_rate=linspace(0, 1, 5),
+        min_samples_leaf=range(1, 102, 10)
     )
 
 
 def ada_boost() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         ensemble.AdaBoostClassifier,
-        "AdaBoost",
-        random_state=Just(SEED),
+        "AdaBoost (decision stumps)",
+        num_trials=5,
         algorithm=Just("SAMME"),
-        n_estimators=Just(427),
-        learning_rate=linspace(5.93, 6.423, 50)
+        n_estimators=range(1, 502, 50),
+        learning_rate=logspace(1e-15, 1000, 10)
     )
 
 
 def bagging() -> OptimizeResult:
-    return optimize_parameters(
+    return optimize(
         ensemble.BaggingClassifier,
         "Bagging",
-        max_features=Just(240),
-        random_state=Just(SEED),
-        n_estimators=Just(168),
-        max_samples=linspace(0.489, 0.533, 50)
+        num_trials=5,
+        n_estimators=range(1, 502, 50),
+        max_samples=range(1, 541, 10)
     )

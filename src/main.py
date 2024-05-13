@@ -1,9 +1,8 @@
-from src.tests import test_tree
+from src.tests import *
 
 
 def main():
-    for x in test_tree():
-        print(x)
+    print(decision_tree())
 
 
 if __name__ == "__main__":
