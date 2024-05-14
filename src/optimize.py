@@ -104,7 +104,7 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, scale_data: bo
 
         end_time = time()
 
-    results = sorted((max(result, key=lambda t: t[1]) for result in results),
+    results = sorted((max(result, key=lambda t: t[1]) for result in results if len(result) > 0),
                      key=lambda t: t[1], reverse=True)
     median_case = results[len(results) // 2]
 

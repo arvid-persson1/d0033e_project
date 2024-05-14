@@ -107,7 +107,7 @@ def linear_model_pa() -> OptimizeResult:
         "Linear Model (passive aggressive)",
         scale_data=True,
         num_trials=5,
-        C=logspace(-15, 3, 100)
+        C=logspace(5.727272727272727, 5.828282828282829, 100)
     )
 
 
@@ -117,8 +117,8 @@ def linear_model_ridge() -> OptimizeResult:
         "Linear Model (ridge)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(-15, 3, 25),
-        solver=("auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs")
+        alpha=logspace(-2.25, -0.75, 100),
+        solver=Just("auto")
     )
 
 
@@ -128,10 +128,9 @@ def linear_model_sgd() -> OptimizeResult:
         "Linear Model (stochastic gradient descent)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(-15, 3, 10),
-        loss=("hinge", "log_loss", "modified_huber", "squared_hinge", "perceptron",
-              "squared_error", "huber", "epsilon_insensitive", "squared_epsilon_insensitive"),
-        penalty=("l1", "l2", "elasticnet", None)
+        alpha=logspace(-4.428571428571429, -4.26530612244898, 50),
+        loss=Just("squared_hinge"),
+        penalty=Just("l2")
     )
 
 
