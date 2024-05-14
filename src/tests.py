@@ -107,7 +107,7 @@ def linear_model_pa() -> OptimizeResult:
         "Linear Model (passive aggressive)",
         scale_data=True,
         num_trials=5,
-        C=logspace(1e-15, 1000, 200)
+        C=logspace(-15, 3, 100)
     )
 
 
@@ -117,7 +117,7 @@ def linear_model_ridge() -> OptimizeResult:
         "Linear Model (ridge)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(1e-15, 1000, 25),
+        alpha=logspace(-15, 3, 25),
         solver=("auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs")
     )
 
@@ -128,7 +128,7 @@ def linear_model_sgd() -> OptimizeResult:
         "Linear Model (stochastic gradient descent)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(1e-15, 1000, 10),
+        alpha=logspace(-15, 3, 10),
         loss=("hinge", "log_loss", "modified_huber", "squared_hinge", "perceptron",
               "squared_error", "huber", "epsilon_insensitive", "squared_epsilon_insensitive"),
         penalty=("l1", "l2", "elasticnet", None)
@@ -139,7 +139,7 @@ def naive_bayes() -> OptimizeResult:
     return optimize(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=logspace(1e-15, 1000, 1000)
+        alpha=logspace(-15, 3, 1000)
     )
 
 
@@ -158,7 +158,7 @@ def radius_neighbors() -> OptimizeResult:
         neighbors.RadiusNeighborsClassifier,
         "Radius Neighbors",
         scale_data=True,
-        radius=logspace(1e-15, 1000, 500),
+        radius=logspace(-15, 3, 500),
         weights=("uniform", "distance")
     )
 
@@ -200,7 +200,7 @@ def nn_equal() -> OptimizeResult:
         num_trials=5,
         hidden_layer_sizes=(equal_layers(count, size) for count in range(1, 11, 3) for size in range(1, 502, 100)),
         activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(1e-15, 1000, 5)
+        alpha=logspace(-15, 3, 5)
     )
 
 
@@ -215,7 +215,7 @@ def nn_single() -> OptimizeResult:
         num_trials=5,
         hidden_layer_sizes=(single_layer(size) for size in range(1, 502, 50)),
         activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(1e-15, 1000, 5)
+        alpha=logspace(-15, 3, 5)
     )
 
 
@@ -231,7 +231,7 @@ def nn_random() -> OptimizeResult:
         num_trials=5,
         hidden_layer_sizes=(random_layers(1, 10, 1, 500) for _ in range(50)),
         activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(1e-15, 1000, 5)
+        alpha=logspace(-15, 3, 5)
     )
 
 
@@ -278,7 +278,7 @@ def ada_boost() -> OptimizeResult:
         num_trials=5,
         algorithm=Just("SAMME"),
         n_estimators=range(1, 502, 50),
-        learning_rate=logspace(1e-15, 1000, 10)
+        learning_rate=logspace(-15, 3, 10)
     )
 
 

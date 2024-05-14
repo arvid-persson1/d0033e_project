@@ -2,7 +2,7 @@ import tests
 
 
 def main():
-    print(tests.svm_sigmoid())
+    print(tests.linear_model_pa())
 
 
 if __name__ == "__main__":
