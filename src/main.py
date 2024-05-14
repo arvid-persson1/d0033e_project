@@ -1,8 +1,8 @@
-from src.tests import *
+import tests
 
 
 def main():
-    print(decision_tree())
+    print(tests.svm_sigmoid())
 
 
 if __name__ == "__main__":

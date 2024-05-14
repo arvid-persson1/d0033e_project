@@ -1,7 +1,7 @@
 from pandas import read_csv, DataFrame, Series
 
-__training = read_csv("../data/training_processed.csv")
-__testing = read_csv("../data/testing_processed.csv")
+__training = read_csv("./data/training_processed.csv")
+__testing = read_csv("./data/testing_processed.csv")
 
 # Numeric values (positions and angles) are in columns 0-239
 __training_features = __training.iloc[:, range(240)]

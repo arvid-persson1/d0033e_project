@@ -35,7 +35,7 @@ def svm_linear() -> OptimizeResult:
         scale_data=True,
         kernel=Just("linear"),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 1000)
+        nu=Just(0.3390397404411425)
     )
 
 
@@ -47,8 +47,8 @@ def svm_quad() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(2),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 25),
-        coef0=linspace(-100, 100, 25)
+        nu=linspace(0.3194444444444451, 0.32638888888888956, 50),
+        coef0=linspace(10.41666666666667, 11.805555555555559, 50)
     )
 
 
@@ -60,8 +60,8 @@ def svm_cub() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(3),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 25),
-        coef0=linspace(-100, 100, 25)
+        nu=linspace(1e-15, 0.08333333333333424, 50),
+        coef0=linspace(16.66666666666667, 33.33333333333334, 50)
     )
 
 
@@ -73,8 +73,8 @@ def svm_quar() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(4),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 25),
-        coef0=linspace(-1000, 1000, 25)
+        nu=linspace(0.3222789115646265, 0.3256802721088442, 50),
+        coef0=linspace(30.612244897959158, 37.41496598639453, 50)
     )
 
 
@@ -85,7 +85,7 @@ def svm_rbf() -> OptimizeResult:
         scale_data=True,
         kernel=Just("rbf"),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 1000)
+        nu=linspace(0.01010101010101109, 0.030303030303031275, 1000)
     )
 
 
@@ -96,7 +96,8 @@ def svm_sigmoid() -> OptimizeResult:
         scale_data=True,
         kernel=Just("sigmoid"),
         probability=Just(False),
-        nu=linspace(1e-15, 1, 1000)
+        nu=linspace(0.3939393939393946, 0.41414141414141475, 1000),
+        coef0=Just(0)
     )
 
 
