@@ -134,11 +134,11 @@ def linear_model_sgd() -> OptimizeResult:
     )
 
 
-def naive_bayes() -> OptimizeResult:
+def bayes() -> OptimizeResult:
     return optimize(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=logspace(-15, 3, 1000)
+        alpha=logspace(-1.7927927927927936, -1.7567567567567561, 1000)
     )
 
 

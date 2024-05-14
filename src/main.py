@@ -2,7 +2,7 @@ import tests
 
 
 def main():
-    print(tests.linear_model_sgd())
+    print(tests.bayes())
 
 
 if __name__ == "__main__":
