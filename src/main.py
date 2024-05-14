@@ -2,7 +2,7 @@ import tests
 
 
 def main():
-    print(tests.bayes())
+    print(tests.bagging_default())
 
 
 if __name__ == "__main__":

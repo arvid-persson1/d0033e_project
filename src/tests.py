@@ -3,6 +3,7 @@ from typing import Tuple
 
 from numpy import linspace, logspace
 from sklearn import *
+from sklearn.tree import DecisionTreeClassifier
 
 from optimize import optimize, OptimizeResult
 
@@ -47,8 +48,8 @@ def svm_quad() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(2),
         probability=Just(False),
-        nu=linspace(0.3194444444444451, 0.32638888888888956, 50),
-        coef0=linspace(10.41666666666667, 11.805555555555559, 50)
+        nu=Just(0.3218537414965993),
+        coef0=Just(10.41666666666667)
     )
 
 
@@ -60,8 +61,8 @@ def svm_cub() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(3),
         probability=Just(False),
-        nu=linspace(1e-15, 0.08333333333333424, 50),
-        coef0=linspace(16.66666666666667, 33.33333333333334, 50)
+        nu=Just(0.0017006802721098418),
+        coef0=Just(20.7482993197279)
     )
 
 
@@ -73,8 +74,8 @@ def svm_quar() -> OptimizeResult:
         kernel=Just("poly"),
         degree=Just(4),
         probability=Just(False),
-        nu=linspace(0.3222789115646265, 0.3256802721088442, 50),
-        coef0=linspace(30.612244897959158, 37.41496598639453, 50)
+        nu=Just(0.3222789115646265),
+        coef0=Just(32.27821740941272)
     )
 
 
@@ -85,7 +86,7 @@ def svm_rbf() -> OptimizeResult:
         scale_data=True,
         kernel=Just("rbf"),
         probability=Just(False),
-        nu=linspace(0.01010101010101109, 0.030303030303031275, 1000)
+        nu=Just(0.012467012467013455)
     )
 
 
@@ -96,7 +97,7 @@ def svm_sigmoid() -> OptimizeResult:
         scale_data=True,
         kernel=Just("sigmoid"),
         probability=Just(False),
-        nu=linspace(0.3939393939393946, 0.41414141414141475, 1000),
+        nu=Just(0.4075894075894082),
         coef0=Just(0)
     )
 
@@ -107,7 +108,7 @@ def linear_model_pa() -> OptimizeResult:
         "Linear Model (passive aggressive)",
         scale_data=True,
         num_trials=5,
-        C=logspace(5.727272727272727, 5.828282828282829, 100)
+        C=Just(582135.3562373725)
     )
 
 
@@ -117,7 +118,7 @@ def linear_model_ridge() -> OptimizeResult:
         "Linear Model (ridge)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(-2.25, -0.75, 100),
+        alpha=Just(0.03217923812785397),
         solver=Just("auto")
     )
 
@@ -128,7 +129,7 @@ def linear_model_sgd() -> OptimizeResult:
         "Linear Model (stochastic gradient descent)",
         scale_data=True,
         num_trials=5,
-        alpha=logspace(-4.428571428571429, -4.26530612244898, 50),
+        alpha=Just(5.3871855299887975e-05),
         loss=Just("squared_hinge"),
         penalty=Just("l2")
     )
@@ -138,7 +139,7 @@ def bayes() -> OptimizeResult:
     return optimize(
         naive_bayes.BernoulliNB,
         "Naive Bayes (Bernoulli)",
-        alpha=logspace(-1.7927927927927936, -1.7567567567567561, 1000)
+        alpha=Just(0.016114142772530166)
     )
 
 
@@ -147,8 +148,8 @@ def knn() -> OptimizeResult:
         neighbors.KNeighborsClassifier,
         "k Nearest Neighbors",
         scale_data=True,
-        n_neighbors=range(1, 101),
-        weights=("uniform", "distance")
+        n_neighbors=Just(1),
+        weights=Just("uniform")
     )
 
 
@@ -157,8 +158,8 @@ def radius_neighbors() -> OptimizeResult:
         neighbors.RadiusNeighborsClassifier,
         "Radius Neighbors",
         scale_data=True,
-        radius=logspace(-15, 3, 500),
-        weights=("uniform", "distance")
+        radius=Just(58.611111111111114),
+        weights=Just("distance")
     )
 
 
@@ -167,11 +168,11 @@ def decision_tree() -> OptimizeResult:
         tree.DecisionTreeClassifier,
         "Decision Tree",
         num_trials=5,
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("best", "random"),
-        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
-        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
-        max_features=("log2", "sqrt", None)
+        criterion=Just("entropy"),
+        splitter=Just("random"),
+        min_samples_split=Just(1e-18),
+        min_samples_leaf=Just(0.0022675736961451413),
+        max_features=Just(None)
     )
 
 
@@ -180,11 +181,11 @@ def extra_tree() -> OptimizeResult:
         tree.ExtraTreeClassifier,
         "Extra Tree",
         num_trials=5,
-        criterion=("gini", "entropy", "log_loss"),
-        splitter=("best", "random"),
-        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
-        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
-        max_features=("log2", "sqrt", None)
+        criterion=Just("entropy"),
+        splitter=Just("best"),
+        min_samples_split=Just(0.018140589569160984),
+        min_samples_leaf=Just(1e-18),
+        max_features=Just(None)
     )
 
 
@@ -196,10 +197,11 @@ def nn_equal() -> OptimizeResult:
         neural_network.MLPClassifier,
         "Multilayer Perceptron (all hidden layers equal size)",
         scale_data=True,
-        num_trials=5,
-        hidden_layer_sizes=(equal_layers(count, size) for count in range(1, 11, 3) for size in range(1, 502, 100)),
-        activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(-15, 3, 5)
+        num_trials=25,
+        max_iter=Just(4000),
+        hidden_layer_sizes=Just(equal_layers(2, 161)),
+        activation=Just("logistic"),
+        alpha=Just(2.371373705661655e-10)
     )
 
 
@@ -211,10 +213,11 @@ def nn_single() -> OptimizeResult:
         neural_network.MLPClassifier,
         "Multilayer Perceptron (single hidden layer)",
         scale_data=True,
-        num_trials=5,
-        hidden_layer_sizes=(single_layer(size) for size in range(1, 502, 50)),
-        activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(-15, 3, 5)
+        num_trials=25,
+        max_iter=Just(2500),
+        hidden_layer_sizes=Just(single_layer(150)),
+        activation=Just("logistic"),
+        alpha=Just(1e-15)
     )
 
 
@@ -226,11 +229,11 @@ def nn_random() -> OptimizeResult:
         neural_network.MLPClassifier,
         "Multilayer Perceptron (randomly sampled layouts)",
         scale_data=True,
-        max_iter=Just(2000),
-        num_trials=5,
-        hidden_layer_sizes=(random_layers(1, 10, 1, 500) for _ in range(50)),
-        activation=("identity", "logistic", "tanh", "relu"),
-        alpha=logspace(-15, 3, 5)
+        num_trials=15,
+        max_iter=Just(2500),
+        hidden_layer_sizes=(random_layers(1, 2, 120, 200) for _ in range(50)),
+        activation=Just("logistic"),
+        alpha=logspace(-15, -12, 5)
     )
 
 
@@ -238,12 +241,12 @@ def random_forest() -> OptimizeResult:
     return optimize(
         ensemble.RandomForestClassifier,
         "Random Forest",
-        num_trials=5,
-        criterion=("gini", "entropy", "log_loss"),
-        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
-        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
-        max_features=("log2", "sqrt", None),
-        bootstrap=(True, False)
+        num_trials=25,
+        criterion=Just("log_loss"),
+        min_samples_split=linspace(1e-24, 0.013888888888888888, 100),
+        min_samples_leaf=Just(1e-24),
+        max_features=Just("sqrt"),
+        bootstrap=Just(False)
     )
 
 
@@ -251,12 +254,12 @@ def extra_trees() -> OptimizeResult:
     return optimize(
         ensemble.ExtraTreesClassifier,
         "Extra Trees",
-        num_trials=5,
-        criterion=("gini", "entropy", "log_loss"),
-        min_samples_split=linspace(1e-15, 1 - 1e-15, 5),
-        min_samples_leaf=linspace(1e-15, 1 - 1e-15, 5),
-        max_features=("log2", "sqrt", None),
-        bootstrap=(True, False)
+        num_trials=1000,
+        criterion=Just("log_loss"),
+        min_samples_split=Just(3e-3),
+        min_samples_leaf=Just(1e-3),
+        max_features=Just(None),
+        bootstrap=Just(False)
     )
 
 
@@ -264,9 +267,9 @@ def grad_boost() -> OptimizeResult:
     return optimize(
         ensemble.HistGradientBoostingClassifier,
         "Histogram-based Gradient Boosting",
-        max_leaf_nodes=Just(None),
-        learning_rate=linspace(0, 1, 5),
-        min_samples_leaf=range(1, 102, 10)
+        max_leaf_nodes=Just(100),
+        learning_rate=Just(0.11547819846894582),
+        min_samples_leaf=Just(18)
     )
 
 
@@ -274,18 +277,33 @@ def ada_boost() -> OptimizeResult:
     return optimize(
         ensemble.AdaBoostClassifier,
         "AdaBoost (decision stumps)",
-        num_trials=5,
+        num_trials=50,
         algorithm=Just("SAMME"),
-        n_estimators=range(1, 502, 50),
-        learning_rate=logspace(-15, 3, 10)
+        n_estimators=Just(500),
+        learning_rate=Just(6.080658554525504)
     )
 
 
-def bagging() -> OptimizeResult:
+def bagging_default() -> OptimizeResult:
     return optimize(
         ensemble.BaggingClassifier,
-        "Bagging",
-        num_trials=5,
-        n_estimators=range(1, 502, 50),
-        max_samples=range(1, 541, 10)
+        "Bagging (default classifier)",
+        num_trials=1,
+        n_estimators=range(1, 502, 100),
+        max_samples=range(1, 406, 101)
+    )
+
+
+def bagging_custom() -> OptimizeResult:
+    return optimize(
+        ensemble.BaggingClassifier,
+        "Bagging (default classifier)",
+        num_trials=3,
+        # Optimized parameters for decision tree
+        estimator=Just(DecisionTreeClassifier(
+            criterion="entropy", splitter="random", min_samples_split=1e-18,
+            min_samples_leaf=0.0022675736961451413, max_features=None
+        )),
+        n_estimators=range(1, 502, 100),
+        max_samples=range(1, 406, 101)
     )
