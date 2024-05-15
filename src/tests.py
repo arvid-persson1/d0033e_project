@@ -1,3 +1,4 @@
+from functools import partial
 from random import randint
 from typing import Tuple
 
@@ -288,22 +289,24 @@ def bagging_default() -> OptimizeResult:
     return optimize(
         ensemble.BaggingClassifier,
         "Bagging (default classifier)",
-        num_trials=1,
-        n_estimators=range(1, 502, 100),
-        max_samples=range(1, 406, 101)
+        num_trials=25,
+        n_estimators=Just(500),
+        max_samples=Just(0.5)
     )
 
 
 def bagging_custom() -> OptimizeResult:
     return optimize(
-        ensemble.BaggingClassifier,
+        partial(
+            # Optimized parameters for decision tree
+            ensemble.BaggingClassifier,
+            estimator=Just(DecisionTreeClassifier(
+                criterion="entropy", splitter="random", min_samples_split=1e-18,
+                min_samples_leaf=0.0022675736961451413, max_features=None
+            ))
+        ),
         "Bagging (default classifier)",
-        num_trials=3,
-        # Optimized parameters for decision tree
-        estimator=Just(DecisionTreeClassifier(
-            criterion="entropy", splitter="random", min_samples_split=1e-18,
-            min_samples_leaf=0.0022675736961451413, max_features=None
-        )),
-        n_estimators=range(1, 502, 100),
-        max_samples=range(1, 406, 101)
+        num_trials=25,
+        n_estimators=Just(500),
+        max_samples=Just(0.4)
     )

@@ -106,7 +106,7 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, scale_data: bo
 
     results = sorted((max(result, key=lambda t: t[1]) for result in results if len(result) > 0),
                      key=lambda t: t[1], reverse=True)
-    median_case = results[len(results) // 2]
+    median_case = results[0] #len(results) // 2
 
     best_parameters, trn_acc = median_case
     best_parameters = name_params(best_parameters)

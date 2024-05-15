@@ -1,0 +1,15 @@
+Model: Bagging (custom classifier)
+Accuracy on verification split: 75.6%
+Accuracy on testing data: 84.3%
+Average runtime: 4.2e-01 seconds
+Best parameters found:
+n_estimators = 500
+max_samples = 0.9142857142857143
+
+Model: Bagging (default classifier)
+Accuracy on verification split: 78.5%
+Accuracy on testing data: 83.1%
+Average runtime: 4.2e-01 seconds
+Best parameters found:
+n_estimators = 500
+max_samples = 0.4
