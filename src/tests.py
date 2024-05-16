@@ -310,3 +310,67 @@ def bagging_custom() -> OptimizeResult:
         n_estimators=Just(500),
         max_samples=Just(0.4)
     )
+
+
+def svm_linear_pca() -> OptimizeResult:
+    return optimize(
+        svm.NuSVC,
+        "SVM, linear, PCA",
+        preprocessor="pca",
+        kernel=Just("linear"),
+        probability=Just(False),
+        nu=Just(4.026230252556475e-05)
+    )
+
+
+def svm_quad_pca() -> OptimizeResult:
+    return optimize(
+        svm.NuSVC,
+        "SVM, polynomial (quadratic), PCA",
+        preprocessor="pca",
+        kernel=Just("poly"),
+        degree=Just(2),
+        probability=Just(False),
+        nu=Just(0.001959183673979592),
+        coef0=Just(0.6111399161913893)
+    )
+
+
+def nn_single_pca() -> OptimizeResult:
+    def single_layer(size: int) -> Tuple[int]:
+        return (size,)
+
+    return optimize(
+        neural_network.MLPClassifier,
+        "Multilayer Perceptron (single hidden layer), PCA",
+        preprocessor="pca",
+        num_trials=15,
+        max_iter=Just(2500),
+        hidden_layer_sizes=(single_layer(n) for n in range(51, 152, 25)),
+        activation=Just("tanh"),
+        alpha=logspace(-1.6666666666666667, -0.7777777777777777, 10)
+    )
+
+
+def random_forest_pca() -> OptimizeResult:
+    return optimize(
+        ensemble.RandomForestClassifier,
+        "Random Forest, PCA",
+        preprocessor="pca",
+        num_trials=15,
+        criterion=Just("gini"),
+        min_samples_split=Just(1e-15),
+        min_samples_leaf=Just(4.445000000000001e-16)
+    )
+
+
+def extra_trees_pca() -> OptimizeResult:
+    return optimize(
+        ensemble.ExtraTreesClassifier,
+        "Extra Trees, PCA",
+        preprocessor="pca",
+        num_trials=25,
+        criterion=Just("gini"),
+        min_samples_split=Just(7.867566666666669e-16),
+        min_samples_leaf=Just(1e-21)
+    )
