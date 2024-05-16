@@ -1,5 +1,7 @@
 from pandas import read_csv, DataFrame, Series
 
+CLASSES = 30
+
 __training = read_csv("./data/training_processed.csv")
 __training_scaled = read_csv("./data/training_scaled.csv")
 __training_pc = read_csv("./data/training_pc.csv")

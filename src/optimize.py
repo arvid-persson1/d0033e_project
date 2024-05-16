@@ -48,7 +48,8 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: 
     in given ranges. This operation can be very expensive.
     :param model: the constructor for the classifier to use.
     :param name: the name of the model.
-    :param preprocessor: how to process the data before training.
+    :param preprocessor: how to process the data before training, if at all.
+    `scale` uses scaled values. `pca` uses principal components.
     :param n_components: numer of components to keep. Only used if `preprocessor` is `pca`.
     Default is all.
     :param params: all values to try for all the parameters to vary.
@@ -65,7 +66,7 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: 
         try:
             classifier = model(**config)
         except TypeError as e:
-            raise TypeError(f"Error: invalid parameters to model: {e}")
+            raise ValueError(f"Error: invalid parameters to model: {e}")
 
         try:
             classifier.fit(trn_ft, trn_tg)
@@ -82,9 +83,11 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: 
         case "pca":
             trn_ft = training_pc()
             tst_ft = testing_pc()
-        case _:
+        case None:
             trn_ft = training_features()
             tst_ft = testing_features()
+        case _:
+            raise ValueError("Error: invalid preprocessor.")
 
     trn_tg = training_targets()
     tst_tg = testing_targets()

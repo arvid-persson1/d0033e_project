@@ -1,8 +1,5 @@
-import tests
-
-
 def main():
-    print(tests.extra_trees_pca())
+    pass
 
 
 if __name__ == "__main__":
