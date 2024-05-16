@@ -34,7 +34,7 @@ def svm_linear() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, linear",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("linear"),
         probability=Just(False),
         nu=Just(0.3390397404411425)
@@ -45,7 +45,7 @@ def svm_quad() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, polynomial (quadratic)",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("poly"),
         degree=Just(2),
         probability=Just(False),
@@ -58,7 +58,7 @@ def svm_cub() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, polynomial (cubic)",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("poly"),
         degree=Just(3),
         probability=Just(False),
@@ -71,7 +71,7 @@ def svm_quar() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, polynomial (quartic)",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("poly"),
         degree=Just(4),
         probability=Just(False),
@@ -84,7 +84,7 @@ def svm_rbf() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, RBF",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("rbf"),
         probability=Just(False),
         nu=Just(0.012467012467013455)
@@ -95,7 +95,7 @@ def svm_sigmoid() -> OptimizeResult:
     return optimize(
         svm.NuSVC,
         "SVM, sigmoid",
-        scale_data=True,
+        preprocessor="scale",
         kernel=Just("sigmoid"),
         probability=Just(False),
         nu=Just(0.4075894075894082),
@@ -107,7 +107,7 @@ def linear_model_pa() -> OptimizeResult:
     return optimize(
         linear_model.PassiveAggressiveClassifier,
         "Linear Model (passive aggressive)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=5,
         C=Just(582135.3562373725)
     )
@@ -117,7 +117,7 @@ def linear_model_ridge() -> OptimizeResult:
     return optimize(
         linear_model.RidgeClassifier,
         "Linear Model (ridge)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=5,
         alpha=Just(0.03217923812785397),
         solver=Just("auto")
@@ -128,7 +128,7 @@ def linear_model_sgd() -> OptimizeResult:
     return optimize(
         linear_model.SGDClassifier,
         "Linear Model (stochastic gradient descent)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=5,
         alpha=Just(5.3871855299887975e-05),
         loss=Just("squared_hinge"),
@@ -148,7 +148,7 @@ def knn() -> OptimizeResult:
     return optimize(
         neighbors.KNeighborsClassifier,
         "k Nearest Neighbors",
-        scale_data=True,
+        preprocessor="scale",
         n_neighbors=Just(1),
         weights=Just("uniform")
     )
@@ -158,7 +158,7 @@ def radius_neighbors() -> OptimizeResult:
     return optimize(
         neighbors.RadiusNeighborsClassifier,
         "Radius Neighbors",
-        scale_data=True,
+        preprocessor="scale",
         radius=Just(58.611111111111114),
         weights=Just("distance")
     )
@@ -197,7 +197,7 @@ def nn_equal() -> OptimizeResult:
     return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (all hidden layers equal size)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=25,
         max_iter=Just(4000),
         hidden_layer_sizes=Just(equal_layers(2, 161)),
@@ -213,7 +213,7 @@ def nn_single() -> OptimizeResult:
     return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (single hidden layer)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=25,
         max_iter=Just(2500),
         hidden_layer_sizes=Just(single_layer(150)),
@@ -229,7 +229,7 @@ def nn_random() -> OptimizeResult:
     return optimize(
         neural_network.MLPClassifier,
         "Multilayer Perceptron (randomly sampled layouts)",
-        scale_data=True,
+        preprocessor="scale",
         num_trials=15,
         max_iter=Just(2500),
         hidden_layer_sizes=(random_layers(1, 2, 120, 200) for _ in range(50)),

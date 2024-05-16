@@ -1,12 +1,43 @@
 from numpy import array, float64, cross, sin, cos, arccos, dot, append
 from numpy.linalg import norm as mag
-from pandas import read_csv, Series, concat
+from pandas import read_csv, Series, DataFrame
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 from joints import Joint
 
-__training_raw = read_csv("../data/training_filled.csv", names=tuple(Joint.headers()))
-__testing_raw = read_csv("../data/testing_filled.csv", names=tuple(Joint.headers()))
+# Least number of components giving 95% accuracy.
+N_COMPONENTS = 88
+
+
+def main():
+    training = read_csv("../data/training_filled.csv", names=tuple(Joint.headers()))
+    testing = read_csv("../data/testing_filled.csv", names=tuple(Joint.headers()))
+
+    training = training.apply(__process, axis=1)
+    testing = testing.apply(__process, axis=1)
+
+    training.to_csv("../data/training_processed.csv", index=False)
+    testing.to_csv("../data/testing_processed.csv", index=False)
+
+    scaler = StandardScaler()
+    training_scaled = scaler.fit_transform(training.iloc[:, 0:240])
+    training.iloc[:, 0:240] = training_scaled
+    testing_scaled = scaler.transform(testing.iloc[:, 0:240])
+    testing.iloc[:, 0:240] = testing_scaled
+
+    training.to_csv("../data/training_scaled.csv", index=False)
+    testing.to_csv("../data/testing_scaled.csv", index=False)
+
+    pca = PCA(N_COMPONENTS)
+    columns = tuple(f"PC{i}" for i in range(N_COMPONENTS))
+    training_pc = pca.fit_transform(training_scaled)
+    training_pc = DataFrame(training_pc, columns=columns)
+    testing_pc = pca.transform(testing_scaled)
+    testing_pc = DataFrame(testing_pc, columns=columns)
+
+    training_pc.to_csv("../data/training_pc.csv", index=False)
+    testing_pc.to_csv("../data/testing_pc.csv", index=False)
 
 
 def __process(row: Series) -> Series:
@@ -26,14 +57,14 @@ def __process(row: Series) -> Series:
     # mag(k) is known to be 1
     theta = arccos(dot(n, k) / mag(n))
 
-    # Numpy likely has built-in optimized methods to these transformations.
+    # Numpy likely has built-in optimized methods to these transformations that should be used instead.
     st = sin(theta)
     ct = cos(theta)
     rotation = array([
-        [ct,  0,  st,  0],
-        [0,   1,  0,   0],
-        [-st, 0,  ct,  0],
-        [0,   0,  0,   1]
+        [ct, 0, st, 0],
+        [0, 1, 0, 0],
+        [-st, 0, ct, 0],
+        [0, 0, 0, 1]
     ])
 
     for i in range(len(Joint)):
@@ -48,8 +79,5 @@ def __process(row: Series) -> Series:
     return row
 
 
-__training_raw = __training_raw.apply(__process, axis=1)
-__testing_raw = __testing_raw.apply(__process, axis=1)
-
-__training_raw.to_csv("../data/training_processed.csv", index=False)
-__testing_raw.to_csv("../data/testing_processed.csv", index=False)
+if __name__ == "__main__":
+    main()

@@ -9,7 +9,6 @@ from typing import Callable, Dict, Any, Iterable
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split as split
-from sklearn.preprocessing import StandardScaler
 
 from data import *
 
@@ -42,14 +41,16 @@ Best parameters found:
 
 
 # noinspection PyUnresolvedReferences,PyArgumentList
-def optimize(model: Callable[..., ClassifierMixin], name: str, *, scale_data: bool = False,
-             num_trials: int = 1, **params: Iterable[Any]) -> OptimizeResult:
+def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: Optional[str] = None,
+             n_components: Optional[int] = None, num_trials: int = 1, **params: Iterable[Any]) -> OptimizeResult:
     """
     Attempts to find the optimal parameters for a model by trying all combinations
     in given ranges. This operation can be very expensive.
     :param model: the constructor for the classifier to use.
     :param name: the name of the model.
-    :param scale_data: whether to scale the data before training.
+    :param preprocessor: how to process the data before training.
+    :param n_components: numer of components to keep. Only used if `preprocessor` is `pca`.
+    Default is all.
     :param params: all values to try for all the parameters to vary.
     :param num_trials: the number of trials to run to account for random variation.
     The median result is returned.
@@ -74,14 +75,19 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, scale_data: bo
                 print(f"Error: {e}\nModel: {classifier}\n", file=stderr)
             return 0
 
-    trn_ft = training_features()
-    tst_ft = testing_features()
+    match preprocessor:
+        case "scale":
+            trn_ft = training_features_scaled()
+            tst_ft = testing_features_scaled()
+        case "pca":
+            trn_ft = training_pc()
+            tst_ft = testing_pc()
+        case _:
+            trn_ft = training_features()
+            tst_ft = testing_features()
+
     trn_tg = training_targets()
     tst_tg = testing_targets()
-
-    if scale_data:
-        trn_ft = StandardScaler().fit_transform(trn_ft)
-        tst_ft = StandardScaler().fit_transform(tst_ft)
 
     # 75% for training, 25% for validation.
     trn_ft, val_ft, trn_tg, val_tg = split(trn_ft, trn_tg, test_size=0.25, random_state=SEED)
