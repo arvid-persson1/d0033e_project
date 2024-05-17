@@ -15,14 +15,24 @@ from optimize import feature_weights
 matplotlib.use("Qt5Agg")
 
 
-def train_model(alhpa: float = 0) -> ClassifierMixin:
+BEST_FACTOR = 0.21521521521521522
+
+
+def train_model(alpha: float = BEST_FACTOR) -> ClassifierMixin:
+    """
+    Trains the best available model.
+    :param alpha: how much to let the binary importances affect the weights.
+    0 for balanced weights, 1 for only binary importances.
+    :return: a trained model; an instance of `ClassifierMixin`.
+    """
+    
     model = ensemble.ExtraTreesClassifier(
         max_features=240,
         criterion="gini",
         max_depth=14,
         random_state=92,
         min_samples_split=1e-4,
-        class_weight=feature_weights(alhpa)
+        class_weight=feature_weights(alpha)
     )
     model.fit(training_features(), training_targets())
 
@@ -46,7 +56,7 @@ def predictions(include_labels: bool = True, include_features: bool = False,
     if include_labels:
         df["GESTURE_LABEL"] = testing_targets().apply(gesture_name)
 
-    df["PREDICTION"] = train_model(0.21521521521521522).predict(testing_features())
+    df["PREDICTION"] = train_model(BEST_FACTOR).predict(testing_features())
     df["ACTUAL"] = testing_targets()
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
@@ -82,7 +92,7 @@ def plot_confusion(normalize: Any = None):
     """
 
     cm = ConfusionMatrixDisplay.from_estimator(
-        train_model(0.21521521521521522),
+        train_model(BEST_FACTOR),
         testing_features(),
         testing_targets(),
         normalize=normalize
@@ -105,7 +115,7 @@ def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
     indices = (randint(0, 539) for _ in range(count)) if random_order else range(count)
 
     for index in indices:
-        prediction = train_model(0.21521521521521522).predict(testing_features().iloc[[index]])[0]
+        prediction = train_model(BEST_FACTOR).predict(testing_features().iloc[[index]])[0]
         target = testing_targets()[index]
 
         if visualize:
