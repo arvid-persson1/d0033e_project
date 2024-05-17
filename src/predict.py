@@ -41,11 +41,13 @@ def train_model(alpha: float = BEST_FACTOR) -> ClassifierMixin:
 
 # noinspection PyUnresolvedReferences
 def predictions(include_labels: bool = True, include_features: bool = False,
-                copy: bool = False, sort: bool = False) -> DataFrame:
+                alpha: float = BEST_FACTOR, copy: bool = False, sort: bool = False) -> DataFrame:
     """
     Gets the predicted classes for all gestures along with the actual classes, using the best available model.
     :param include_labels: whether to include the labels for the classes.
     :param include_features: whether to include the features.
+    :param alpha: how much to let the binary importances affect the weights.
+    0 for balanced weights, 1 for only binary importances.
     :param copy: whether to copy the features. Only used if `include_features` is enabled.
     :param sort: whether to sort the data.
     :return: A dataframe containing the predictions.
@@ -56,7 +58,7 @@ def predictions(include_labels: bool = True, include_features: bool = False,
     if include_labels:
         df["GESTURE_LABEL"] = testing_targets().apply(gesture_name)
 
-    df["PREDICTION"] = train_model(BEST_FACTOR).predict(testing_features())
+    df["PREDICTION"] = train_model(alpha).predict(testing_features())
     df["ACTUAL"] = testing_targets()
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
@@ -67,17 +69,19 @@ def predictions(include_labels: bool = True, include_features: bool = False,
 
 
 def predictions_incorrect(include_labels: bool = True, include_features: bool = False,
-                          copy: bool = False, sort: bool = False) -> DataFrame:
+                          alpha: float = BEST_FACTOR, copy: bool = False, sort: bool = False) -> DataFrame:
     """
     Gets only the entries which the best available model classified incorrectly.
     :param include_labels: whether to include the labels for the classes.
     :param include_features: whether to include the features.
+    :param alpha: how much to let the binary importances affect the weights.
+    0 for balanced weights, 1 for only binary importances.
     :param copy: whether to copy the features. Only used if `include_features` is enabled.
     :param sort: whether to sort the data.
     :return: A dataframe containing the incorrect predictions.
     """
 
-    df = predictions(include_labels, include_features, copy, sort)
+    df = predictions(include_labels, include_features, alpha, copy, sort)
 
     df = df[~df["CORRECT"]]
     df.drop(["CORRECT"], axis=1, inplace=True)
@@ -102,10 +106,12 @@ def plot_confusion(normalize: Any = None):
 
 
 # noinspection PyUnresolvedReferences
-def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
+def predict(count: int = 1, alpha: float = BEST_FACTOR, random_order: bool = True, visualize: bool = True):
     """
     Predicts the classes of unseen testing samples using the best available model.
     :param count: the number of samples to use.
+    :param alpha: how much to let the binary importances affect the weights.
+    0 for balanced weights, 1 for only binary importances.
     :param random_order: whether to present a random selection of samples in a random order.
     If this is disabled, starts from the first row.
     :param visualize: whether to display the result as a plot.
@@ -115,7 +121,7 @@ def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
     indices = (randint(0, 539) for _ in range(count)) if random_order else range(count)
 
     for index in indices:
-        prediction = train_model(BEST_FACTOR).predict(testing_features().iloc[[index]])[0]
+        prediction = train_model(alpha).predict(testing_features().iloc[[index]])[0]
         target = testing_targets()[index]
 
         if visualize:
