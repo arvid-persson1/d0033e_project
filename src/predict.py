@@ -1,5 +1,5 @@
 from random import randint
-from typing import Any, Dict
+from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -9,6 +9,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 from data import *
 from joints import gesture_name, Joint
+from optimize import feature_weights
 
 # Override default environment setting; display plot in new window.
 matplotlib.use("Qt5Agg")
@@ -21,13 +22,14 @@ def train_model(alhpa: float = 0) -> ClassifierMixin:
         max_depth=14,
         random_state=92,
         min_samples_split=1e-4,
-        class_weight=feature_weights(0.21521521521521522)
+        class_weight=feature_weights(alhpa)
     )
     model.fit(training_features(), training_targets())
 
     return model
 
 
+# noinspection PyUnresolvedReferences
 def predictions(include_labels: bool = True, include_features: bool = False,
                 copy: bool = False, sort: bool = False) -> DataFrame:
     """
@@ -44,7 +46,7 @@ def predictions(include_labels: bool = True, include_features: bool = False,
     if include_labels:
         df["GESTURE_LABEL"] = testing_targets().apply(gesture_name)
 
-    df["PREDICTION"] = MODEL.predict(testing_features())
+    df["PREDICTION"] = train_model(0.21521521521521522).predict(testing_features())
     df["ACTUAL"] = testing_targets()
     df["CORRECT"] = df["PREDICTION"] == df["ACTUAL"]
 
@@ -79,11 +81,17 @@ def plot_confusion(normalize: Any = None):
     :param normalize: how, if at all, to normalize the values. See `CunfusionMatrixDisplay.from_estimator`.
     """
 
-    cm = ConfusionMatrixDisplay.from_estimator(MODEL, testing_features(), testing_targets(), normalize=normalize)
+    cm = ConfusionMatrixDisplay.from_estimator(
+        train_model(0.21521521521521522),
+        testing_features(),
+        testing_targets(),
+        normalize=normalize
+    )
     cm.plot()
     plt.show()
 
 
+# noinspection PyUnresolvedReferences
 def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
     """
     Predicts the classes of unseen testing samples using the best available model.
@@ -97,7 +105,7 @@ def predict(count: int = 1, random_order: bool = True, visualize: bool = True):
     indices = (randint(0, 539) for _ in range(count)) if random_order else range(count)
 
     for index in indices:
-        prediction = MODEL.predict(testing_features().iloc[[index]])[0]
+        prediction = train_model(0.21521521521521522).predict(testing_features().iloc[[index]])[0]
         target = testing_targets()[index]
 
         if visualize:

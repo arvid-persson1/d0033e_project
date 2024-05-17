@@ -1,5 +1,5 @@
 from inspect import signature
-from typing import Callable, List
+from typing import Callable
 
 from sklearn.base import ClusterMixin
 
