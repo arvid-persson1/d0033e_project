@@ -1,9 +1,10 @@
 from random import randint
-from typing import Any
+from typing import Any, Dict
 
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn import *
+from sklearn.base import ClassifierMixin
 from sklearn.metrics import ConfusionMatrixDisplay
 
 from data import *
@@ -12,14 +13,19 @@ from joints import gesture_name, Joint
 # Override default environment setting; display plot in new window.
 matplotlib.use("Qt5Agg")
 
-MODEL = ensemble.ExtraTreesClassifier(
-    max_features=240,
-    criterion="gini",
-    max_depth=14,
-    random_state=92,
-    min_samples_split=1e-4
-)
-MODEL.fit(training_features(), training_targets())
+
+def train_model(alhpa: float = 0) -> ClassifierMixin:
+    model = ensemble.ExtraTreesClassifier(
+        max_features=240,
+        criterion="gini",
+        max_depth=14,
+        random_state=92,
+        min_samples_split=1e-4,
+        class_weight=feature_weights(0.21521521521521522)
+    )
+    model.fit(training_features(), training_targets())
+
+    return model
 
 
 def predictions(include_labels: bool = True, include_features: bool = False,

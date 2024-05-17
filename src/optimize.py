@@ -42,7 +42,7 @@ Best parameters found:
 
 # noinspection PyUnresolvedReferences,PyArgumentList
 def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: Optional[str] = None,
-             n_components: Optional[int] = None, num_trials: int = 1, **params: Iterable[Any]) -> OptimizeResult:
+             num_trials: int = 1, **params: Iterable[Any]) -> OptimizeResult:
     """
     Attempts to find the optimal parameters for a model by trying all combinations
     in given ranges. This operation can be very expensive.
@@ -50,8 +50,6 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: 
     :param name: the name of the model.
     :param preprocessor: how to process the data before training, if at all.
     `scale` uses scaled values. `pca` uses principal components.
-    :param n_components: numer of components to keep. Only used if `preprocessor` is `pca`.
-    Default is all.
     :param params: all values to try for all the parameters to vary.
     :param num_trials: the number of trials to run to account for random variation.
     The median result is returned.
@@ -130,3 +128,14 @@ def optimize(model: Callable[..., ClassifierMixin], name: str, *, preprocessor: 
                           tst_acc,
                           (end_time - start_time) / (len(results) * used_threads * num_trials),
                           best_parameters)
+
+
+def feature_weights(alpha: float = 0) -> Dict[int, float]:
+    """
+    Adjusts feature weights to account for results from the binary set.
+    :param alpha: how much to let the binary importances affect the weights.
+    0 for balanced weights, 1 for only binary importances.
+    :return: a dictionary mapping the classes to their weights.
+    """
+
+    return {c: 1 - alpha + w * alpha for c, w in enumerate(feature_importances_binary())}
