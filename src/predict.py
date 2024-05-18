@@ -3,9 +3,9 @@ from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
-from sklearn import *
 from sklearn.base import ClassifierMixin
-from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score
 
 from data import *
 from joints import gesture_name, Joint
@@ -26,7 +26,7 @@ def train_model(alpha: float = BEST_FACTOR) -> ClassifierMixin:
     :return: a trained model; an instance of `ClassifierMixin`.
     """
     
-    model = ensemble.ExtraTreesClassifier(
+    model = ExtraTreesClassifier(
         max_features=240,
         criterion="gini",
         max_depth=14,
@@ -163,3 +163,49 @@ def predict(count: int = 1, alpha: float = BEST_FACTOR, random_order: bool = Tru
                 print(f"{index}\tcorrect")
             else:
                 print(f'{index}\tincorrect (guessed "{gesture_name(prediction)}", was "{gesture_name(target)}")')
+
+
+# noinspection PyUnresolvedReferences
+def accuracy() -> float:
+    """
+    Calculates the accuracy of the best available model.
+    :return: the accuracy; a value between 0 and 1 (inclusive).
+    """
+
+    return accuracy_score(testing_targets(), train_model().predict(testing_features()))
+
+
+# noinspection PyUnresolvedReferences
+def precision(average: str = "macro") -> float:
+    """
+    Calculates the precision of the best available model.
+    :param average: the averaging method to use.
+    Should be one of {"macro", "micro" and "weighted"}.
+    :return: the precision; a value between 0 and 1 (inclusive).
+    """
+
+    return precision_score(testing_targets(), train_model().predict(testing_features()), average=average or "macro")
+
+
+# noinspection PyUnresolvedReferences
+def recall(average: str = "macro") -> float:
+    """
+    Calculates the precision of the best available model.
+    :param average: the averaging method to use.
+    Should be one of {"macro", "micro" and "weighted"}.
+    :return: the precision; a value between 0 and 1 (inclusive).
+    """
+
+    return recall_score(testing_targets(), train_model().predict(testing_features()), average=average or "macro")
+
+
+# noinspection PyUnresolvedReferences
+def f1(average: str = "macro") -> float:
+    """
+    Calculates the F1-score of the best available model.
+    :param average: the averaging method to use.
+    Should be one of {"macro", "micro" and "weighted"}.
+    :return: the F1-score; a value between 0 and 1 (inclusive).
+    """
+
+    return f1_score(testing_targets(), train_model().predict(testing_features()), average=average or "macro")
